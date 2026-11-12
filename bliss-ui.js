@@ -181,3 +181,24 @@ window.recalcCommBox = () => {
     </div>
   `;
 };
+// FIX: Remove Duplicate Login Card Completely (Keep Only Single Royal LIC Login Box)
+(function removeDuplicateLoginCards() {
+  function cleanDuplicates() {
+    const allInputs = document.querySelectorAll('input[type="password"]');
+    if (allInputs.length > 1) {
+      for (let i = 1; i < allInputs.length; i++) {
+        const dupBox = allInputs[i].closest(".bg-white, #authScreen > div, form") || allInputs[i].parentElement?.parentElement;
+        if (dupBox) dupBox.remove();
+      }
+    }
+    const allAuthScreens = document.querySelectorAll("#authScreen");
+    if (allAuthScreens.length > 1) {
+      for (let i = 1; i < allAuthScreens.length; i++) {
+        allAuthScreens[i].remove();
+      }
+    }
+  }
+  cleanDuplicates();
+  window.addEventListener("DOMContentLoaded", cleanDuplicates);
+  setTimeout(cleanDuplicates, 500);
+})();
