@@ -231,6 +231,98 @@
     window.openProTool = function (id) { const c = prompt("Client Name:", "Valued Policyholder") || "Valued Policyholder"; const msg = id === "wishToolModal" ? "Warm Birthday Wishes to " + c + "! - Samsad Ansari (LIC Advisor)" : "Dear " + c + ", gentle reminder for your LIC Policy premium due. - Samsad Ansari (LIC Advisor)"; window.location.href = "https://api.whatsapp.com/send?text=" + encodeURIComponent(msg); };
     window.openCommissionTracker = function () { const p = parseFloat(prompt("1st Year Premium (₹):", "25000")); if (p) { const fy = Math.round(p * 0.25), b = Math.round(fy * 0.40); alert("1st Yr Comm (25%): ₹" + fy + "\nBonus Comm (40%): ₹" + b + "\nTotal Earning: ₹" + (fy + b)); } };
   </script>
-  <script src="lic-engine.js?v=300"></script>
+  <script>
+  window.calculateBenefit = function () {
+    const selId = document.getElementById("calcPlanSelect")?.value || "736";
+    const p = (window.LIC_DB || []).find(x => x.id === selId) || {
+      id: "736", name: "736 - LIC Jeevan Labh", type: "Endowment",
+      rates: { 16: 84.5, 21: 54.4, 25: 46.8 }, bonusBands: { 16: [40], 21: [43], 25: [47] }
+    };
+
+    const client = (document.getElementById("calcClientName")?.value || "").trim() || "Valued Client";
+    const age = parseInt(document.getElementById("calcAge")?.value) || 30;
+    const sa = parseFloat(document.getElementById("calcSA")?.value) || 500000;
+    const term = parseInt(document.getElementById("calcTerm")?.value) || 21;
+    const ppt = parseInt(document.getElementById("calcPPT")?.value) || 15;
+    const rider = document.getElementById("calcRider")?.value || "NONE";
+
+    const baseRate = p.rates[term] || Object.values(p.rates)[0] || 54.4;
+    const riderAdd = rider === "NONE" ? 0 : 1.25;
+    const annualBase = (sa / 1000) * (baseRate + riderAdd);
+    const yr1Y = Math.round(annualBase * 1.045);
+    const yr2Y = Math.round(annualBase * 1.0225);
+    const halfY = Math.round(yr1Y * 0.505);
+    const qtrY = Math.round(yr1Y * 0.255);
+    const mlyY = Math.round(yr1Y * 0.085);
+
+    const bonusRate = (p.bonusBands[term]?.[0] || 43);
+    const totalBonus = p.type === "Term Plan" ? 0 : Math.round((sa / 1000) * bonusRate * term);
+    const fab = p.type === "Term Plan" ? 0 : Math.round((sa / 1000) * (term >= 20 ? 100 : 40));
+    const maturity = p.type === "Term Plan" ? 0 : (sa + totalBonus + fab);
+    const totalPaid = yr1Y + yr2Y * Math.max(0, ppt - 1);
+
+    window.latestQuoteData = { plan: p, client, age, sa, term, ppt, yr1Y, yr2Y, halfY, qtrY, mlyY, totalBonus, fab, maturity, totalPaid };
+
+    document.getElementById("pdfPlanTitle").textContent = p.name;
+    document.getElementById("pdfClientMeta").textContent = "Client: " + client + " (Age: " + age + " Yrs) • Term: " + term + " / PPT: " + ppt + " Yrs";
+
+    const grid = document.getElementById("quoteSummaryGrid");
+    if (grid) {
+      grid.innerHTML =
+        '<div class="p-2.5 bg-blue-50 rounded-xl border border-blue-100"><p class="text-[10px] text-slate-500">Sum Assured</p><p class="font-black text-[#003366] text-sm">₹' + sa.toLocaleString("en-IN") + '</p></div>' +
+        '<div class="p-2.5 bg-amber-50 rounded-xl border border-amber-100"><p class="text-[10px] text-slate-500">1st Yr Yearly (Inc. GST)</p><p class="font-black text-amber-800 text-sm">₹' + yr1Y.toLocaleString("en-IN") + '</p></div>' +
+        '<div class="p-2.5 bg-slate-50 rounded-xl border"><p class="text-[10px] text-slate-500">2nd Yr+ Yearly / Monthly</p><p class="font-bold text-slate-800">₹' + yr2Y.toLocaleString("en-IN") + ' / ₹' + mlyY.toLocaleString("en-IN") + '</p></div>' +
+        '<div class="p-2.5 bg-slate-50 rounded-xl border"><p class="text-[10px] text-slate-500">Half-Yr / Quarterly</p><p class="font-bold text-slate-800">₹' + halfY.toLocaleString("en-IN") + ' / ₹' + qtrY.toLocaleString("en-IN") + '</p></div>' +
+        '<div class="p-2.5 bg-purple-50 rounded-xl border border-purple-100"><p class="text-[10px] text-slate-500">Total Est. Investment</p><p class="font-bold text-purple-900">₹' + totalPaid.toLocaleString("en-IN") + '</p></div>' +
+        '<div class="p-2.5 bg-indigo-50 rounded-xl border border-indigo-100"><p class="text-[10px] text-slate-500">Accrued Bonus + FAB</p><p class="font-bold text-indigo-900">₹' + (totalBonus + fab).toLocaleString("en-IN") + '</p></div>' +
+        '<div class="p-3 bg-emerald-600 text-white rounded-xl col-span-2 flex justify-between items-center shadow"><div><p class="text-[10px] text-emerald-100 font-bold">ESTIMATED MATURITY RETURN</p><p class="font-black text-lg">₹' + maturity.toLocaleString("en-IN") + '</p></div><span class="bg-white/20 px-2.5 py-1 rounded-lg text-[10px] font-bold">Tax-Free u/s 10(10D)</span></div>';
+    }
+
+    const advName = document.getElementById("profName")?.value || "Samsad Ansari";
+    const advMob = document.getElementById("profMobile")?.value || "7004776567";
+    const advBranch = document.getElementById("profBranch")?.value || "Chirkunda Branch (556)";
+    const advCode = document.getElementById("profCode")?.value || "";
+    document.getElementById("pdfAdvisorName").textContent = "Prepared by: " + advName + " (LIC Advisor)";
+    document.getElementById("pdfAdvisorMeta").textContent = (advCode ? "Code: " + advCode + " | " : "") + "Mob: " + advMob + " | " + advBranch;
+    document.getElementById("quotationPrintArea")?.scrollIntoView({ behavior: "smooth" });
+  };
+     window.downloadQuotePDF = function () {
+    if (!window.latestQuoteData) window.calculateBenefit();
+    const area = document.getElementById("quotationPrintArea");
+    if (!area) return;
+    if (window.html2pdf) {
+      html2pdf().set({
+        margin: 10,
+        filename: "LIC_Quotation_" + (window.latestQuoteData?.client || "Client").replace(/\s+/g, "_") + ".pdf",
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      }).from(area).save().catch(function () { window.print(); });
+    } else {
+      window.print();
+    }
+  };
+
+  window.shareQuoteWhatsApp = function () {
+    if (!window.latestQuoteData) window.calculateBenefit();
+    const q = window.latestQuoteData;
+    const advName = document.getElementById("profName")?.value || "Samsad Ansari";
+    const advMob = document.getElementById("profMobile")?.value || "7004776567";
+    const text =
+      "🇮🇳 *LIC OF INDIA - BENEFIT ILLUSTRATION*\n" +
+      "━━━━━━━━━━━━━━━━━━━━\n" +
+      "📋 *Plan:* " + q.plan.name + "\n" +
+      "👤 *Client:* " + q.client + " (Age: " + q.age + " Yrs)\n" +
+      "🛡️ *Sum Assured:* ₹" + q.sa.toLocaleString("en-IN") + "\n" +
+      "⏳ *Term / PPT:* " + q.term + " Yrs / " + q.ppt + " Yrs\n\n" +
+      "💳 *Premium Summary:*\n" +
+      "• 1st Yr Yearly: ₹" + q.yr1Y.toLocaleString("en-IN") + "\n" +
+      "• 2nd Yr+ Yearly: ₹" + q.yr2Y.toLocaleString("en-IN") + "\n" +
+      "• Monthly (NACH): ₹" + q.mlyY.toLocaleString("en-IN") + "\n\n" +
+      "💰 *Est. Maturity Value:* ₹" + q.maturity.toLocaleString("en-IN") + "\n" +
+      "━━━━━━━━━━━━━━━━━━━━\n" +
+      "📞 *Advisor:* " + advName + " (" + advMob + ")";
+    window.location.href = "https://api.whatsapp.com/send?text=" + encodeURIComponent(text);
+  };
+</script>
 </body>
 </html>
