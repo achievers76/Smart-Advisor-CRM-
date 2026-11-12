@@ -1,0 +1,10 @@
+[
+  { "id": "936", "name": "Jeevan Labh (Table 936)", "baseRate": 54.5, "bonusRate": 47, "fab": 20, "defaultTerm": 21, "defaultPPT": 15 },
+  { "id": "945", "name": "Jeevan Umang (Table 945)", "baseRate": 78.0, "bonusRate": 48, "fab": 25, "defaultTerm": 30, "defaultPPT": 15 },
+  { "id": "871", "name": "Jeevan Utsav (Table 871)", "baseRate": 88.5, "bonusRate": 40, "fab": 0, "defaultTerm": 15, "defaultPPT": 10 },
+  { "id": "874", "name": "Amritbaal (Table 874)", "baseRate": 68.0, "bonusRate": 80, "fab": 0, "defaultTerm": 20, "defaultPPT": 7 },
+  { "id": "915", "name": "New Jeevan Anand (Table 915)", "baseRate": 56.2, "bonusRate": 45, "fab": 20, "defaultTerm": 20, "defaultPPT": 20 },
+  { "id": "914", "name": "New Endowment (Table 914)", "baseRate": 51.8, "bonusRate": 42, "fab": 15, "defaultTerm": 20, "defaultPPT": 20 },
+  { "id": "933", "name": "Jeevan Lakshya (Table 933)", "baseRate": 55.4, "bonusRate": 46, "fab": 20, "defaultTerm": 21, "defaultPPT": 18 },
+  { "id": "860", "name": "Bima Jyoti (Table 860 - Guaranteed)", "baseRate": 82.5, "bonusRate": 50, "fab": 0, "defaultTerm": 20, "defaultPPT": 15 }
+]
