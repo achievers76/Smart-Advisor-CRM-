@@ -1825,5 +1825,41 @@
       navigator.serviceWorker.register('sw.js').catch(() => {});
     }
   </script>
+  <!-- Excel Support & Smart Upgrade Patch -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script type="module" src="app.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    // 1. Add Import Excel Button directly on Dashboard & CRM
+    const crmBar = document.querySelector('#tab-crm .flex.gap-2');
+    if (crmBar && !document.getElementById('autoExcelBtn')) {
+      const btn = document.createElement('button');
+      btn.id = 'autoExcelBtn';
+      btn.type = 'button';
+      btn.onclick = () => document.getElementById('smartExcelModal').classList.remove('hidden');
+      btn.className = 'bg-amber-500 text-[#003366] px-3 rounded-xl font-bold text-xs shadow';
+      btn.innerHTML = '<i class="fas fa-file-excel"></i> Import';
+      crmBar.appendChild(btn);
+    }
+
+    // 2. Add Excel Upload Modal at the bottom
+    const modalHTML = `
+      <div id="smartExcelModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 shadow-2xl">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-[#003366]">Import Policyholders (Excel / CSV)</h3>
+            <button onclick="document.getElementById('smartExcelModal').classList.add('hidden')" class="text-slate-400">✕</button>
+          </div>
+          <p class="text-xs text-slate-600">LIC Portal ki Excel (.xlsx / .xls) ya CSV file select karein:</p>
+          <button onclick="downloadSampleExcel()" class="text-xs text-[#003366] font-bold underline">Download Sample Excel Template (.xlsx)</button>
+          <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" class="w-full text-xs border rounded-xl p-2 bg-slate-50" />
+          <div id="importStatusBox" class="hidden text-xs p-2.5 rounded-xl bg-emerald-50 text-emerald-800 font-semibold"></div>
+          <button onclick="processSpreadsheetImport()" id="btnRunImport" class="w-full lic-blue text-white font-bold py-3 rounded-xl">Upload & Import All Policies</button>
+        </div>
+      </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+  });
+</script>
+  
 </body>
 </html>
