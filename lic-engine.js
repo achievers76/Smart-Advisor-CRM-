@@ -289,4 +289,227 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("calcResultBox").scrollIntoView({ behavior: "smooth" });
   };
 });
+// Remaining 20 Active LIC Plans (Part A: Term Assurance & Special Endowment)
+LIC_DB.push(
+  {
+    id: "743", name: "Aadhaar Stambh (Table 743 - Male)", type: "Endowment",
+    minAge: 8, maxAge: 55, minSA: 200000,
+    combos: [{ t: 10, p: 10 }, { t: 15, p: 15 }, { t: 20, p: 20 }],
+    rates: { 10: 98.40, 15: 66.20, 20: 49.50 }, slope: 0.40,
+    bonusBands: { 10: [20, 22, 22], 15: [24, 26, 26], 20: [28, 30, 30] },
+    noFAB: true, saRebate: { 300000: 1.0 }
+  },
+  {
+    id: "744", name: "Aadhaar Shila (Table 744 - Female)", type: "Endowment",
+    minAge: 8, maxAge: 55, minSA: 200000,
+    combos: [{ t: 10, p: 10 }, { t: 15, p: 15 }, { t: 20, p: 20 }],
+    rates: { 10: 97.80, 15: 65.60, 20: 48.90 }, slope: 0.38,
+    bonusBands: { 10: [20, 22, 22], 15: [24, 26, 26], 20: [28, 30, 30] },
+    noFAB: true, saRebate: { 300000: 1.0 }
+  },
+  {
+    id: "863", name: "Dhan Rekha (Table 863 - Money Back)", type: "Money Back",
+    minAge: 0, maxAge: 55, minSA: 200000,
+    combos: [{ t: 20, p: 10 }, { t: 30, p: 15 }, { t: 40, p: 20 }],
+    rates: { 20: 118.50, 30: 84.20, 40: 66.40 }, slope: 0.45,
+    bonusBands: { 20: [50, 50, 50], 30: [55, 55, 55], 40: [60, 60, 60] },
+    noFAB: true, note: "Guaranteed Additions + Periodic Money Back + Full SA at Maturity",
+    saRebate: { 500000: 1.50 }
+  },
+  {
+    id: "865", name: "Dhan Sanchay (Table 865 - Guar. Income)", type: "Guaranteed",
+    minAge: 3, maxAge: 50, minSA: 330000,
+    combos: [{ t: 10, p: 5 }, { t: 15, p: 10 }, { t: 15, p: 15 }],
+    rates: { 10: 195.0, 15: 105.0 }, slope: 0.30,
+    bonusBands: { 10: [55, 55, 55], 15: [60, 60, 60] },
+    noFAB: true, note: "Guaranteed Income Payouts + Lump Sum Terminal Benefit",
+    saRebate: { 500000: 1.25 }
+  },
+  {
+    id: "955", name: "Jeevan Amar (Table 955 - Pure Term)", type: "Term Plan",
+    minAge: 18, maxAge: 65, minSA: 2500000,
+    combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 30, p: 30 }, { t: 40, p: 40 }],
+    rates: { 15: 1.65, 20: 1.85, 30: 2.35, 40: 3.10 }, slope: 0.12,
+    bonusBands: { 15: [0, 0, 0], 20: [0, 0, 0], 30: [0, 0, 0], 40: [0, 0, 0] },
+    noFAB: true, note: "Pure Risk Cover Only (No Maturity Value; 18% GST Applicable)",
+    saRebate: { 5000000: 0.25, 10000000: 0.40 }
+  },
+  {
+    id: "954", name: "New Tech-Term (Table 954 - Online)", type: "Term Plan",
+    minAge: 18, maxAge: 65, minSA: 5000000,
+    combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }, { t: 40, p: 40 }],
+    rates: { 20: 1.45, 30: 1.90, 40: 2.55 }, slope: 0.10,
+    bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0], 40: [0, 0, 0] },
+    noFAB: true, note: "Online Pure Term Cover (18% GST Applicable)",
+    saRebate: { 10000000: 0.30 }
+  },
+  {
+    id: "859", name: "Saral Jeevan Bima (Table 859 - Term)", type: "Term Plan",
+    minAge: 18, maxAge: 65, minSA: 500000,
+    combos: [{ t: 10, p: 10 }, { t: 20, p: 20 }, { t: 30, p: 30 }],
+    rates: { 10: 2.10, 20: 2.45, 30: 3.05 }, slope: 0.14,
+    bonusBands: { 10: [0, 0, 0], 20: [0, 0, 0], 30: [0, 0, 0] },
+    noFAB: true, note: "Standard Pure Term Plan up to ₹25 Lakh SA",
+    saRebate: {}
+  },
+  {
+    id: "875", name: "Yuva Term (Table 875 - Youth Term)", type: "Term Plan",
+    minAge: 18, maxAge: 45, minSA: 5000000,
+    combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }, { t: 40, p: 40 }],
+    rates: { 20: 1.35, 30: 1.75, 40: 2.30 }, slope: 0.09,
+    bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0], 40: [0, 0, 0] },
+    noFAB: true, note: "Special Low-Rate Term Cover for Young Earners",
+    saRebate: { 10000000: 0.25 }
+  },
+  {
+    id: "876", name: "Digi Term (Table 876)", type: "Term Plan",
+    minAge: 18, maxAge: 45, minSA: 5000000,
+    combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }],
+    rates: { 20: 1.30, 30: 1.70 }, slope: 0.09,
+    bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0] },
+    noFAB: true, note: "Digital Pure Protection Plan",
+    saRebate: {}
+  },
+  {
+    id: "877", name: "Yuva Credit Life (Table 877)", type: "Term Plan",
+    minAge: 18, maxAge: 45, minSA: 5000000,
+    combos: [{ t: 15, p: 1 }, { t: 20, p: 1 }, { t: 25, p: 1 }],
+    rates: { 15: 14.50, 20: 18.20, 25: 22.80 }, slope: 0.45,
+    bonusBands: { 15: [0, 0, 0], 20: [0, 0, 0], 25: [0, 0, 0] },
+    noFAB: true, note: "Reducing Cover Loan Protection Plan",
+    saRebate: {}
+  }
+);
+// Remaining 20 Active LIC Plans (Part B: Pension, ULIP & Micro Insurance)
+LIC_DB.push(
+  {
+    id: "857", name: "Jeevan Akshay-VII (Table 857 - Pension)", type: "Pension Plan",
+    minAge: 30, maxAge: 85, minSA: 100000,
+    combos: [{ t: 100, p: 1 }], rates: { 100: 1000.0 }, slope: 0,
+    bonusBands: { 100: [0, 0, 0] }, payout: 0.064,
+    noFAB: true, note: "Immediate Lifetime Pension (~6.4% p.a. Annuity Rate)",
+    saRebate: { 500000: 2.0, 1000000: 3.5 }
+  },
+  {
+    id: "858", name: "New Jeevan Shanti (Table 858 - Deferred)", type: "Pension Plan",
+    minAge: 30, maxAge: 79, minSA: 150000,
+    combos: [{ t: 5, p: 1 }, { t: 10, p: 1 }, { t: 12, p: 1 }],
+    rates: { 5: 1000.0, 10: 1000.0, 12: 1000.0 }, slope: 0,
+    bonusBands: { 5: [0, 0, 0], 10: [0, 0, 0], 12: [0, 0, 0] }, payout: 0.088,
+    noFAB: true, note: "Guaranteed Pension after Deferment Period (~8.8% p.a.)",
+    saRebate: { 500000: 2.5 }
+  },
+  {
+    id: "862", name: "Saral Pension (Table 862)", type: "Pension Plan",
+    minAge: 40, maxAge: 80, minSA: 250000,
+    combos: [{ t: 100, p: 1 }], rates: { 100: 1000.0 }, slope: 0,
+    bonusBands: { 100: [0, 0, 0] }, payout: 0.061,
+    noFAB: true, note: "Standard Immediate Annuity with 100% Purchase Price Return",
+    saRebate: {}
+  },
+  {
+    id: "879", name: "Smart Pension (Table 879)", type: "Pension Plan",
+    minAge: 18, maxAge: 85, minSA: 100000,
+    combos: [{ t: 100, p: 1 }], rates: { 100: 1000.0 }, slope: 0,
+    bonusBands: { 100: [0, 0, 0] }, payout: 0.066,
+    noFAB: true, note: "Flexible Single/Joint Life Immediate Annuity Plan",
+    saRebate: {}
+  },
+  {
+    id: "852", name: "LIC SIIP (Table 852 - ULIP)", type: "ULIP Market",
+    minAge: 0, maxAge: 65, minSA: 400000,
+    combos: [{ t: 10, p: 10 }, { t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }],
+    rates: { 10: 100.0, 15: 100.0, 20: 100.0, 25: 100.0 }, slope: 0,
+    bonusBands: { 10: [45, 45, 45], 15: [55, 55, 55], 20: [65, 65, 65], 25: [75, 75, 75] },
+    noFAB: true, note: "Market-Linked Fund Value (@8% Assumed Return + Mortality Refund)",
+    saRebate: {}
+  },
+  {
+    id: "849", name: "Nivesh Plus (Table 849 - Single ULIP)", type: "ULIP Market",
+    minAge: 0, maxAge: 70, minSA: 125000,
+    combos: [{ t: 10, p: 1 }, { t: 15, p: 1 }, { t: 20, p: 1 }, { t: 25, p: 1 }],
+    rates: { 10: 800.0, 15: 800.0, 20: 800.0, 25: 800.0 }, slope: 0,
+    bonusBands: { 10: [60, 60, 60], 15: [75, 75, 75], 20: [90, 90, 90], 25: [105, 105, 105] },
+    noFAB: true, note: "Single Premium Market-Linked Growth Plan",
+    saRebate: {}
+  },
+  {
+    id: "873", name: "Index Plus (Table 873 - Nifty ULIP)", type: "ULIP Market",
+    minAge: 0, maxAge: 60, minSA: 250000,
+    combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }],
+    rates: { 15: 100.0, 20: 100.0, 25: 100.0 }, slope: 0,
+    bonusBands: { 15: [55, 55, 55], 20: [68, 68, 68], 25: [80, 80, 80] },
+    noFAB: true, note: "Nifty 50 / Nifty 100 Index Linked Plan",
+    saRebate: {}
+  },
+  {
+    id: "867", name: "New Pension Plus (Table 867 - ULIP)", type: "Pension Plan",
+    minAge: 25, maxAge: 75, minSA: 100000,
+    combos: [{ t: 10, p: 10 }, { t: 15, p: 15 }, { t: 20, p: 20 }],
+    rates: { 10: 100.0, 15: 100.0, 20: 100.0 }, slope: 0,
+    bonusBands: { 10: [50, 50, 50], 15: [60, 60, 60], 20: [70, 70, 70] },
+    noFAB: true, note: "Unit-Linked Retirement Corpus Builder",
+    saRebate: {}
+  },
+  {
+    id: "940", name: "New Jeevan Mangal (Table 940 - Micro)", type: "Micro Plan",
+    minAge: 18, maxAge: 55, minSA: 10000,
+    combos: [{ t: 10, p: 10 }, { t: 15, p: 15 }],
+    rates: { 10: 102.0, 15: 68.5 }, slope: 0.40,
+    bonusBands: { 10: [0, 0, 0], 15: [0, 0, 0] },
+    noFAB: true, note: "Return of Premiums on Maturity (Micro Insurance)",
+    saRebate: {}
+  },
+  {
+    id: "939", name: "Bhagya Lakshmi (Table 939 - Micro)", type: "Micro Plan",
+    minAge: 18, maxAge: 55, minSA: 20000,
+    combos: [{ t: 7, p: 5 }, { t: 10, p: 8 }, { t: 15, p: 13 }],
+    rates: { 7: 145.0, 10: 104.0, 15: 71.0 }, slope: 0.40,
+    bonusBands: { 7: [10, 10, 10], 10: [12, 12, 12], 15: [15, 15, 15] },
+    noFAB: true, note: "110% of Total Premiums Payable on Maturity",
+    saRebate: {}
+  }
+);
+
+// Refresh Dropdown immediately to show all 35 LIC Plans
+if (document.getElementById("calcPlanSelect")) {
+  document.getElementById("calcPlanSelect").innerHTML = LIC_DB.map(
+    (p) => `<option value="${p.id}">${p.name} — [${p.type}]</option>`
+  ).join("");
+  if (window.handlePlanChange) window.handlePlanChange();
+}
+// Append Remaining Active Plans without touching existing code
+LIC_DB.push(
+  { id: "743", name: "Aadhaar Stambh (Table 743)", type: "Endowment", minAge: 8, maxAge: 55, minSA: 200000, combos: [{ t: 10, p: 10 }, { t: 15, p: 15 }, { t: 20, p: 20 }], rates: { 10: 98.40, 15: 66.20, 20: 49.50 }, slope: 0.40, bonusBands: { 10: [20, 22, 22], 15: [24, 26, 26], 20: [28, 30, 30] }, noFAB: true, saRebate: { 300000: 1.0 } },
+  { id: "744", name: "Aadhaar Shila (Table 744)", type: "Endowment", minAge: 8, maxAge: 55, minSA: 200000, combos: [{ t: 10, p: 10 }, { t: 15, p: 15 }, { t: 20, p: 20 }], rates: { 10: 97.80, 15: 65.60, 20: 48.90 }, slope: 0.38, bonusBands: { 10: [20, 22, 22], 15: [24, 26, 26], 20: [28, 30, 30] }, noFAB: true, saRebate: { 300000: 1.0 } },
+  { id: "863", name: "Dhan Rekha (Table 863)", type: "Money Back", minAge: 0, maxAge: 55, minSA: 200000, combos: [{ t: 20, p: 10 }, { t: 30, p: 15 }, { t: 40, p: 20 }], rates: { 20: 118.50, 30: 84.20, 40: 66.40 }, slope: 0.45, bonusBands: { 20: [50, 50, 50], 30: [55, 55, 55], 40: [60, 60, 60] }, noFAB: true, note: "Guaranteed Additions + Money Back", saRebate: { 500000: 1.50 } },
+  { id: "865", name: "Dhan Sanchay (Table 865)", type: "Guaranteed", minAge: 3, maxAge: 50, minSA: 330000, combos: [{ t: 10, p: 5 }, { t: 15, p: 10 }], rates: { 10: 195.0, 15: 105.0 }, slope: 0.30, bonusBands: { 10: [55, 55, 55], 15: [60, 60, 60] }, noFAB: true, note: "Guaranteed Income Payouts", saRebate: { 500000: 1.25 } },
+  { id: "955", name: "Jeevan Amar (Table 955 - Term)", type: "Term Plan", minAge: 18, maxAge: 65, minSA: 2500000, combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }, { t: 40, p: 40 }], rates: { 20: 1.85, 30: 2.35, 40: 3.10 }, slope: 0.12, bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0], 40: [0, 0, 0] }, noFAB: true, note: "Pure Term Cover (18% GST)", saRebate: { 5000000: 0.25 } },
+  { id: "954", name: "New Tech-Term (Table 954)", type: "Term Plan", minAge: 18, maxAge: 65, minSA: 5000000, combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }], rates: { 20: 1.45, 30: 1.90 }, slope: 0.10, bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0] }, noFAB: true, note: "Online Pure Term", saRebate: { 10000000: 0.30 } },
+  { id: "859", name: "Saral Jeevan Bima (Table 859)", type: "Term Plan", minAge: 18, maxAge: 65, minSA: 500000, combos: [{ t: 10, p: 10 }, { t: 20, p: 20 }, { t: 30, p: 30 }], rates: { 10: 2.10, 20: 2.45, 30: 3.05 }, slope: 0.14, bonusBands: { 10: [0, 0, 0], 20: [0, 0, 0], 30: [0, 0, 0] }, noFAB: true, saRebate: {} },
+  { id: "875", name: "Yuva Term (Table 875)", type: "Term Plan", minAge: 18, maxAge: 45, minSA: 5000000, combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }], rates: { 20: 1.35, 30: 1.75 }, slope: 0.09, bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0] }, noFAB: true, saRebate: {} },
+  { id: "857", name: "Jeevan Akshay-VII (Table 857)", type: "Pension", minAge: 30, maxAge: 85, minSA: 100000, combos: [{ t: 100, p: 1 }], rates: { 100: 1000.0 }, slope: 0, bonusBands: { 100: [0, 0, 0] }, payout: 0.064, noFAB: true, note: "Immediate Pension (~6.4% p.a.)", saRebate: {} },
+  { id: "858", name: "New Jeevan Shanti (Table 858)", type: "Pension", minAge: 30, maxAge: 79, minSA: 150000, combos: [{ t: 5, p: 1 }, { t: 10, p: 1 }, { t: 12, p: 1 }], rates: { 5: 1000.0, 10: 1000.0, 12: 1000.0 }, slope: 0, bonusBands: { 5: [0, 0, 0], 10: [0, 0, 0], 12: [0, 0, 0] }, payout: 0.088, noFAB: true, note: "Deferred Pension (~8.8% p.a.)", saRebate: {} }
+);
+// Append ULIP & All Legacy/Classic Plans for Maturity Calculation
+LIC_DB.push(
+  { id: "852", name: "LIC SIIP (Table 852 - ULIP)", type: "ULIP", minAge: 0, maxAge: 65, minSA: 400000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }], rates: { 15: 100.0, 20: 100.0, 25: 100.0 }, slope: 0, bonusBands: { 15: [55, 55, 55], 20: [65, 65, 65], 25: [75, 75, 75] }, noFAB: true, note: "Market-Linked (@8% Assumed Return)", saRebate: {} },
+  { id: "849", name: "Nivesh Plus (Table 849 - ULIP)", type: "ULIP", minAge: 0, maxAge: 70, minSA: 125000, combos: [{ t: 15, p: 1 }, { t: 20, p: 1 }, { t: 25, p: 1 }], rates: { 15: 800.0, 20: 800.0, 25: 800.0 }, slope: 0, bonusBands: { 15: [75, 75, 75], 20: [90, 90, 90], 25: [105, 105, 105] }, noFAB: true, saRebate: {} },
+  { id: "873", name: "Index Plus (Table 873 - ULIP)", type: "ULIP", minAge: 0, maxAge: 60, minSA: 250000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }], rates: { 15: 100.0, 20: 100.0, 25: 100.0 }, slope: 0, bonusBands: { 15: [55, 55, 55], 20: [68, 68, 68], 25: [80, 80, 80] }, noFAB: true, saRebate: {} },
+  { id: "936-OLD", name: "Jeevan Labh (Old 936 / 836)", type: "Old Plan", minAge: 8, maxAge: 59, minSA: 200000, combos: [{ t: 16, p: 10 }, { t: 21, p: 15 }, { t: 25, p: 16 }], rates: { 16: 85.40, 21: 54.95, 25: 47.45 }, slope: 0.42, bonusBands: { 16: [40, 42, 43], 21: [44, 46, 47], 25: [47, 49, 50] }, saRebate: { 500000: 1.25 } },
+  { id: "915-OLD", name: "New Jeevan Anand (Old 915 / 815)", type: "Old Plan", minAge: 18, maxAge: 50, minSA: 100000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }, { t: 30, p: 30 }], rates: { 15: 76.85, 20: 56.20, 25: 44.65, 30: 37.50 }, slope: 0.48, bonusBands: { 15: [37, 39, 39], 20: [41, 43, 43], 25: [45, 47, 47], 30: [46, 48, 48] }, saRebate: { 500000: 1.50 } },
+  { id: "914-OLD", name: "New Endowment (Old 914 / 814)", type: "Old Plan", minAge: 8, maxAge: 55, minSA: 100000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }, { t: 30, p: 30 }], rates: { 15: 69.50, 20: 51.40, 25: 40.85, 30: 34.15 }, slope: 0.44, bonusBands: { 15: [35, 37, 37], 20: [38, 40, 40], 25: [44, 46, 46], 30: [45, 47, 47] }, saRebate: { 500000: 1.25 } },
+  { id: "933-OLD", name: "Jeevan Lakshya (Old 933 / 833)", type: "Old Plan", minAge: 18, maxAge: 50, minSA: 100000, combos: [{ t: 15, p: 12 }, { t: 18, p: 15 }, { t: 21, p: 18 }, { t: 25, p: 22 }], rates: { 15: 74.10, 18: 60.80, 21: 51.65, 25: 43.20 }, slope: 0.45, bonusBands: { 15: [38, 40, 40], 18: [42, 44, 44], 21: [46, 48, 48], 25: [47, 49, 49] }, saRebate: { 500000: 1.25 } },
+  { id: "14-OLD", name: "Endowment Assurance (Classic 14)", type: "Classic Plan", minAge: 8, maxAge: 55, minSA: 50000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }, { t: 30, p: 30 }], rates: { 15: 68.0, 20: 50.2, 25: 39.8, 30: 33.4 }, slope: 0.42, bonusBands: { 15: [38, 40, 40], 20: [42, 44, 44], 25: [46, 48, 48], 30: [48, 50, 50] }, saRebate: { 100000: 1.0 } },
+  { id: "149-OLD", name: "Jeevan Anand (Classic 149)", type: "Classic Plan", minAge: 18, maxAge: 50, minSA: 100000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }, { t: 30, p: 30 }], rates: { 15: 75.5, 20: 55.0, 25: 43.8, 30: 36.8 }, slope: 0.46, bonusBands: { 15: [38, 40, 40], 20: [42, 44, 44], 25: [46, 48, 48], 30: [48, 50, 50] }, saRebate: { 200000: 1.5 } },
+  { id: "75-OLD", name: "Money Back 20-Yr (Classic 75)", type: "Classic Plan", minAge: 13, maxAge: 50, minSA: 50000, combos: [{ t: 20, p: 20 }], rates: { 20: 66.5 }, slope: 0.44, bonusBands: { 20: [38, 40, 40] }, note: "20% SA at Yr 5, 10, 15 + 40% & Bonus at Yr 20", saRebate: {} },
+  { id: "93-OLD", name: "Money Back 25-Yr (Classic 93)", type: "Classic Plan", minAge: 13, maxAge: 45, minSA: 50000, combos: [{ t: 25, p: 25 }], rates: { 25: 54.0 }, slope: 0.44, bonusBands: { 25: [42, 44, 44] }, note: "15% SA at Yr 5, 10, 15, 20 + 40% & Bonus at Yr 25", saRebate: {} },
+  { id: "133-OLD", name: "Jeevan Mitra Triple (Classic 133)", type: "Classic Plan", minAge: 18, maxAge: 50, minSA: 50000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }], rates: { 15: 76.2, 20: 57.4, 25: 46.5 }, slope: 0.48, bonusBands: { 15: [38, 40, 40], 20: [42, 44, 44], 25: [46, 48, 48] }, saRebate: {} },
+  { id: "165-OLD", name: "Jeevan Saral (Classic 165)", type: "Classic Plan", minAge: 12, maxAge: 60, minSA: 100000, combos: [{ t: 10, p: 10 }, { t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }], rates: { 10: 48.0, 15: 48.0, 20: 48.0, 25: 48.0 }, slope: 0, bonusBands: { 10: [35, 35, 35], 15: [45, 45, 45], 20: [55, 55, 55], 25: [65, 65, 65] }, note: "Maturity SA + Loyalty Additions", saRebate: {} }
+);
+
+if (document.getElementById("calcPlanSelect")) {
+  document.getElementById("calcPlanSelect").innerHTML = LIC_DB.map(p => `<option value="${p.id}">${p.name} — [${p.type}]</option>`).join("");
+  if (window.handlePlanChange) window.handlePlanChange();
+}
 
