@@ -512,4 +512,385 @@ if (document.getElementById("calcPlanSelect")) {
   document.getElementById("calcPlanSelect").innerHTML = LIC_DB.map(p => `<option value="${p.id}">${p.name} — [${p.type}]</option>`).join("");
   if (window.handlePlanChange) window.handlePlanChange();
 }
+// FIX: Unlocked Term & PPT Keyboard Input, Fixed Blank PDF & Fixed Android WhatsApp Share
+window.addEventListener("DOMContentLoaded", () => {
+  // 1. Unlock Term & PPT so keyboard opens and you can type any custom year
+  const pptBox = document.getElementById("calcPPT");
+  if (pptBox) {
+    pptBox.readOnly = false;
+    pptBox.removeAttribute("readonly");
+    pptBox.classList.remove("bg-slate-100");
+    pptBox.classList.add("bg-white");
+  }
+
+  const termEl = document.getElementById("calcTermSelect") || document.getElementById("calcTerm");
+  if (termEl && termEl.tagName === "SELECT") {
+    const numInput = document.createElement("input");
+    numInput.type = "number";
+    numInput.id = "calcTerm";
+    numInput.value = "21";
+    numInput.min = "1";
+    numInput.max = "60";
+    numInput.className = termEl.className.replace("bg-slate-100", "bg-white");
+    termEl.replaceWith(numInput);
+  }
+
+  // Update default Term/PPT when plan changes, while keeping fields editable
+  const origPlanChange = window.handlePlanChange;
+  window.handlePlanChange = () => {
+    const plan = LIC_DB.find(p => p.id === document.getElementById("calcPlanSelect")?.value);
+    const tBox = document.getElementById("calcTerm");
+    const pBox = document.getElementById("calcPPT");
+    if (plan && plan.combos && plan.combos[0] && tBox && pBox) {
+      const age = parseInt(document.getElementById("calcAge")?.value) || 30;
+      tBox.value = plan.byPPT ? Math.max(15, 100 - age) : plan.combos[0].t;
+      pBox.value = plan.combos[0].p;
+    } else if (origPlanChange) {
+      origPlanChange();
+    }
+  };
+
+  // 2. Fix Calculation to accept custom typed Term & PPT + save data for WhatsApp
+  window.calculateBenefit = () => {
+    const plan = LIC_DB.find(p => p.id === document.getElementById("calcPlanSelect")?.value) || LIC_DB[0];
+    const clientName = document.getElementById("calcClientName")?.value.trim() || "Valued Client";
+    const age = parseInt(document.getElementById("calcAge")?.value) || 30;
+    const sa = parseFloat(document.getElementById("calcSA")?.value) || 500000;
+    const customTerm = parseInt(document.getElementById("calcTerm")?.value) || 20;
+    const customPPT = parseInt(document.getElementById("calcPPT")?.value) || 15;
+    const mobile = document.getElementById("calcMobile")?.value.trim() || "";
+
+    // Find closest matching tabular rate or scale smoothly by PPT/Term
+    const rateKeys = Object.keys(plan.rates).map(Number).sort((a, b) => a - b);
+    const lookupKey = plan.byPPT ? customPPT : customTerm;
+    let baseTabular = plan.rates[lookupKey];
+    if (!baseTabular) {
+      const refKey = rateKeys[0] || 20;
+      baseTabular = (plan.rates[refKey] || 55) * (refKey / Math.max(1, lookupKey));
+    }
+
+    const ageRate = baseTabular + (age - 30) * (plan.slope || 0.45);
+    let saRebate = 0;
+    if (plan.saRebate) {
+      Object.keys(plan.saRebate).map(Number).sort((a, b) => a - b).forEach(lim => {
+        if (sa >= lim) saRebate = plan.saRebate[lim];
+      });
+    }
+
+    const netRate = Math.max(8, ageRate - saRebate);
+    const isSingle = customPPT === 1;
+    const basicY = Math.round((sa / 1000) * netRate * (isSingle ? 1 : 0.98));
+    const yr1Y = Math.round(basicY * 1.045);
+    const yr2Y = isSingle ? 0 : Math.round(basicY * 1.0225);
+
+    const saBandIdx = sa < 500000 ? 0 : (sa < 1000000 ? 1 : 2);
+    const firstBandKey = Object.keys(plan.bonusBands)[0];
+    const bonusPer1000 = (plan.bonusBands[lookupKey] || plan.bonusBands[firstBandKey] || [42, 44, 45])[saBandIdx];
+    const totalBonus = Math.round((sa / 1000) * bonusPer1000 * (plan.gaPPT ? customPPT : customTerm));
+
+    let fabPer1000 = 0;
+    if (!plan.noFAB && customTerm >= 15) {
+      fabPer1000 = customTerm >= 25 ? (sa >= 500000 ? 70 : 50) : (customTerm >= 20 ? (sa >= 500000 ? 35 : 25) : 20);
+    }
+    const totalFAB = Math.round((sa / 1000) * fabPer1000);
+    const maturity = sa + totalBonus + totalFAB;
+    const totalPaid = isSingle ? yr1Y : yr1Y + yr2Y * (customPPT - 1);
+    const dailySave = isSingle ? 0 : Math.round(yr2Y / 365);
+
+    document.getElementById("resPlanTitle").textContent = plan.name;
+    document.getElementById("resClientSub").textContent = `Prepared for: ${clientName} (Age: ${age} Yrs)`;
+    document.getElementById("resSA").textContent = `₹${sa.toLocaleString("en-IN")}`;
+    document.getElementById("resTermPPT").textContent = `${customTerm} / ${customPPT} Yrs`;
+    document.getElementById("resMaturity").textContent = `₹${maturity.toLocaleString("en-IN")}`;
+
+    const basicH = isSingle ? 0 : Math.round(((sa / 1000) * netRate * 0.99) / 2);
+    const basicQ = isSingle ? 0 : Math.round(((sa / 1000) * netRate) / 4);
+    const basicM = isSingle ? 0 : Math.round(((sa / 1000) * netRate) / 12);
+
+    document.getElementById("resPremiumTable").innerHTML = `
+      <tr class="bg-blue-50"><td colspan="3" class="p-2 text-[11px] font-semibold text-[#003366]">
+        Maturity: SA ₹${sa.toLocaleString("en-IN")} + Bonus ₹${totalBonus.toLocaleString("en-IN")} + FAB ₹${totalFAB.toLocaleString("en-IN")}
+      </td></tr>
+      ${isSingle
+        ? `<tr><td class="p-2 font-semibold">Single Premium</td><td class="p-2 font-bold">₹${yr1Y.toLocaleString("en-IN")}</td><td class="p-2">Nil</td></tr>`
+        : `<tr><td class="p-2 font-semibold">Yearly (2% Rebate)</td><td class="p-2 font-bold text-[#003366]">₹${yr1Y.toLocaleString("en-IN")}</td><td class="p-2">₹${yr2Y.toLocaleString("en-IN")}</td></tr>
+           <tr><td class="p-2 font-semibold">Half-Yearly (1% Rebate)</td><td class="p-2">₹${Math.round(basicH * 1.045).toLocaleString("en-IN")}</td><td class="p-2">₹${Math.round(basicH * 1.0225).toLocaleString("en-IN")}</td></tr>
+           <tr><td class="p-2 font-semibold">Quarterly</td><td class="p-2">₹${Math.round(basicQ * 1.045).toLocaleString("en-IN")}</td><td class="p-2">₹${Math.round(basicQ * 1.0225).toLocaleString("en-IN")}</td></tr>
+           <tr><td class="p-2 font-semibold">Monthly (NACH)</td><td class="p-2">₹${Math.round(basicM * 1.045).toLocaleString("en-IN")}</td><td class="p-2">₹${Math.round(basicM * 1.0225).toLocaleString("en-IN")}</td></tr>`
+      }`;
+
+    document.getElementById("resTotalPaid").textContent = `₹${totalPaid.toLocaleString("en-IN")}`;
+    document.getElementById("resNetGain").textContent = `+₹${(maturity - totalPaid).toLocaleString("en-IN")}`;
+    document.getElementById("resDailySave").textContent = isSingle ? "One-Time" : `₹${dailySave} / day`;
+
+    // Save quote globally so WhatsApp & PDF buttons always read fresh values
+    window.latestQuoteData = { clientName, mobile, planName: plan.name, sa, term: customTerm, ppt: customPPT, yr1Y, maturity, dailySave };
+
+    document.getElementById("calcResultBox").classList.remove("hidden");
+    document.getElementById("calcResultBox").scrollIntoView({ behavior: "smooth" });
+  };
+
+  // 3. Fix Blank White PDF Issue on Mobile/Tablet
+  window.downloadQuotationPDF = () => {
+    const source = document.getElementById("quotationPrintArea");
+    if (!source) return alert("Please calculate an illustration first.");
+    window.scrollTo(0, 0);
+
+    // Clone to an unclipped container so html2canvas never captures blank screen
+    const clone = source.cloneNode(true);
+    clone.style.width = "700px";
+    clone.style.background = "#ffffff";
+    clone.style.padding = "20px";
+    const header = clone.querySelector(".lic-blue");
+    if (header) header.style.background = "#003366";
+
+    const holder = document.createElement("div");
+    holder.style.position = "fixed";
+    holder.style.left = "0";
+    holder.style.top = "0";
+    holder.style.zIndex = "-9999";
+    holder.appendChild(clone);
+    document.body.appendChild(holder);
+
+    const fileName = `${(window.latestQuoteData?.clientName || "LIC").replace(/\s+/g, "_")}_Quotation.pdf`;
+    html2pdf()
+      .set({
+        margin: 8,
+        filename: fileName,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, backgroundColor: "#ffffff" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      })
+      .from(clone)
+      .save()
+      .then(() => document.body.removeChild(holder))
+      .catch(() => document.body.removeChild(holder));
+  };
+
+  // 4. Fix WhatsApp Share Button on Android App / Browser
+  window.shareQuotationWhatsApp = () => {
+    const q = window.latestQuoteData;
+    if (!q) return alert("Please calculate an illustration first.");
+    const advisor = document.getElementById("pdfAdvisorName")?.textContent || "LIC Advisor";
+    const text = `*LIC Benefit Illustration* 🛡️\n\nDear *${q.clientName}*,\n📌 *Plan:* ${q.planName}\n💰 *Sum Assured:* ₹${q.sa.toLocaleString("en-IN")}\n⏳ *Term / PPT:* ${q.term} / ${q.ppt} Yrs\n💳 *1st Yr Yearly Premium:* ₹${q.yr1Y.toLocaleString("en-IN")}\n🎯 *Est. Tax-Free Maturity:* *₹${q.maturity.toLocaleString("en-IN")}*\n\nRegards,\n*${advisor}*`;
+    const cleanPhone = q.mobile ? "91" + q.mobile.replace(/\D/g, "").slice(-10) : "";
+    const waUrl = `https://api.whatsapp.com/send?${cleanPhone ? "phone=" + cleanPhone + "&" : ""}text=${encodeURIComponent(text)}`;
+    window.location.href = waUrl;
+  };
+});
+// FIX: Unlocked Term & PPT Keyboard Input, Fixed Blank PDF & Fixed Android WhatsApp Share
+window.addEventListener("DOMContentLoaded", () => {
+  // 1. Unlock Term & PPT so keyboard opens and you can type any custom year
+  const pptBox = document.getElementById("calcPPT");
+  if (pptBox) {
+    pptBox.readOnly = false;
+    pptBox.removeAttribute("readonly");
+    pptBox.classList.remove("bg-slate-100");
+    pptBox.classList.add("bg-white");
+  }
+
+  const termEl = document.getElementById("calcTermSelect") || document.getElementById("calcTerm");
+  if (termEl && termEl.tagName === "SELECT") {
+    const numInput = document.createElement("input");
+    numInput.type = "number";
+    numInput.id = "calcTerm";
+    numInput.value = "21";
+    numInput.min = "1";
+    numInput.max = "60";
+    numInput.className = termEl.className.replace("bg-slate-100", "bg-white");
+    termEl.replaceWith(numInput);
+  }
+
+  // Update default Term/PPT when plan changes, while keeping fields editable
+  const origPlanChange = window.handlePlanChange;
+  window.handlePlanChange = () => {
+    const plan = LIC_DB.find(p => p.id === document.getElementById("calcPlanSelect")?.value);
+    const tBox = document.getElementById("calcTerm");
+    const pBox = document.getElementById("calcPPT");
+    if (plan && plan.combos && plan.combos[0] && tBox && pBox) {
+      const age = parseInt(document.getElementById("calcAge")?.value) || 30;
+      tBox.value = plan.byPPT ? Math.max(15, 100 - age) : plan.combos[0].t;
+      pBox.value = plan.combos[0].p;
+    } else if (origPlanChange) {
+      origPlanChange();
+    }
+  };
+
+  // 2. Fix Calculation to accept custom typed Term & PPT + save data for WhatsApp
+  window.calculateBenefit = () => {
+    const plan = LIC_DB.find(p => p.id === document.getElementById("calcPlanSelect")?.value) || LIC_DB[0];
+    const clientName = document.getElementById("calcClientName")?.value.trim() || "Valued Client";
+    const age = parseInt(document.getElementById("calcAge")?.value) || 30;
+    const sa = parseFloat(document.getElementById("calcSA")?.value) || 500000;
+    const customTerm = parseInt(document.getElementById("calcTerm")?.value) || 20;
+    const customPPT = parseInt(document.getElementById("calcPPT")?.value) || 15;
+    const mobile = document.getElementById("calcMobile")?.value.trim() || "";
+
+    // Find closest matching tabular rate or scale smoothly by PPT/Term
+    const rateKeys = Object.keys(plan.rates).map(Number).sort((a, b) => a - b);
+    const lookupKey = plan.byPPT ? customPPT : customTerm;
+    let baseTabular = plan.rates[lookupKey];
+    if (!baseTabular) {
+      const refKey = rateKeys[0] || 20;
+      baseTabular = (plan.rates[refKey] || 55) * (refKey / Math.max(1, lookupKey));
+    }
+
+    const ageRate = baseTabular + (age - 30) * (plan.slope || 0.45);
+    let saRebate = 0;
+    if (plan.saRebate) {
+      Object.keys(plan.saRebate).map(Number).sort((a, b) => a - b).forEach(lim => {
+        if (sa >= lim) saRebate = plan.saRebate[lim];
+      });
+    }
+
+    const netRate = Math.max(8, ageRate - saRebate);
+    const isSingle = customPPT === 1;
+    const basicY = Math.round((sa / 1000) * netRate * (isSingle ? 1 : 0.98));
+    const yr1Y = Math.round(basicY * 1.045);
+    const yr2Y = isSingle ? 0 : Math.round(basicY * 1.0225);
+
+    const saBandIdx = sa < 500000 ? 0 : (sa < 1000000 ? 1 : 2);
+    const firstBandKey = Object.keys(plan.bonusBands)[0];
+    const bonusPer1000 = (plan.bonusBands[lookupKey] || plan.bonusBands[firstBandKey] || [42, 44, 45])[saBandIdx];
+    const totalBonus = Math.round((sa / 1000) * bonusPer1000 * (plan.gaPPT ? customPPT : customTerm));
+
+    let fabPer1000 = 0;
+    if (!plan.noFAB && customTerm >= 15) {
+      fabPer1000 = customTerm >= 25 ? (sa >= 500000 ? 70 : 50) : (customTerm >= 20 ? (sa >= 500000 ? 35 : 25) : 20);
+    }
+    const totalFAB = Math.round((sa / 1000) * fabPer1000);
+    const maturity = sa + totalBonus + totalFAB;
+    const totalPaid = isSingle ? yr1Y : yr1Y + yr2Y * (customPPT - 1);
+    const dailySave = isSingle ? 0 : Math.round(yr2Y / 365);
+
+    document.getElementById("resPlanTitle").textContent = plan.name;
+    document.getElementById("resClientSub").textContent = `Prepared for: ${clientName} (Age: ${age} Yrs)`;
+    document.getElementById("resSA").textContent = `₹${sa.toLocaleString("en-IN")}`;
+    document.getElementById("resTermPPT").textContent = `${customTerm} / ${customPPT} Yrs`;
+    document.getElementById("resMaturity").textContent = `₹${maturity.toLocaleString("en-IN")}`;
+
+    const basicH = isSingle ? 0 : Math.round(((sa / 1000) * netRate * 0.99) / 2);
+    const basicQ = isSingle ? 0 : Math.round(((sa / 1000) * netRate) / 4);
+    const basicM = isSingle ? 0 : Math.round(((sa / 1000) * netRate) / 12);
+
+    document.getElementById("resPremiumTable").innerHTML = `
+      <tr class="bg-blue-50"><td colspan="3" class="p-2 text-[11px] font-semibold text-[#003366]">
+        Maturity: SA ₹${sa.toLocaleString("en-IN")} + Bonus ₹${totalBonus.toLocaleString("en-IN")} + FAB ₹${totalFAB.toLocaleString("en-IN")}
+      </td></tr>
+      ${isSingle
+        ? `<tr><td class="p-2 font-semibold">Single Premium</td><td class="p-2 font-bold">₹${yr1Y.toLocaleString("en-IN")}</td><td class="p-2">Nil</td></tr>`
+        : `<tr><td class="p-2 font-semibold">Yearly (2% Rebate)</td><td class="p-2 font-bold text-[#003366]">₹${yr1Y.toLocaleString("en-IN")}</td><td class="p-2">₹${yr2Y.toLocaleString("en-IN")}</td></tr>
+           <tr><td class="p-2 font-semibold">Half-Yearly (1% Rebate)</td><td class="p-2">₹${Math.round(basicH * 1.045).toLocaleString("en-IN")}</td><td class="p-2">₹${Math.round(basicH * 1.0225).toLocaleString("en-IN")}</td></tr>
+           <tr><td class="p-2 font-semibold">Quarterly</td><td class="p-2">₹${Math.round(basicQ * 1.045).toLocaleString("en-IN")}</td><td class="p-2">₹${Math.round(basicQ * 1.0225).toLocaleString("en-IN")}</td></tr>
+           <tr><td class="p-2 font-semibold">Monthly (NACH)</td><td class="p-2">₹${Math.round(basicM * 1.045).toLocaleString("en-IN")}</td><td class="p-2">₹${Math.round(basicM * 1.0225).toLocaleString("en-IN")}</td></tr>`
+      }`;
+
+    document.getElementById("resTotalPaid").textContent = `₹${totalPaid.toLocaleString("en-IN")}`;
+    document.getElementById("resNetGain").textContent = `+₹${(maturity - totalPaid).toLocaleString("en-IN")}`;
+    document.getElementById("resDailySave").textContent = isSingle ? "One-Time" : `₹${dailySave} / day`;
+
+    // Save quote globally so WhatsApp & PDF buttons always read fresh values
+    window.latestQuoteData = { clientName, mobile, planName: plan.name, sa, term: customTerm, ppt: customPPT, yr1Y, maturity, dailySave };
+
+    document.getElementById("calcResultBox").classList.remove("hidden");
+    document.getElementById("calcResultBox").scrollIntoView({ behavior: "smooth" });
+  };
+
+  // 3. Fix Blank White PDF Issue on Mobile/Tablet
+  window.downloadQuotationPDF = () => {
+    const source = document.getElementById("quotationPrintArea");
+    if (!source) return alert("Please calculate an illustration first.");
+    window.scrollTo(0, 0);
+
+    // Clone to an unclipped container so html2canvas never captures blank screen
+    const clone = source.cloneNode(true);
+    clone.style.width = "700px";
+    clone.style.background = "#ffffff";
+    clone.style.padding = "20px";
+    const header = clone.querySelector(".lic-blue");
+    if (header) header.style.background = "#003366";
+
+    const holder = document.createElement("div");
+    holder.style.position = "fixed";
+    holder.style.left = "0";
+    holder.style.top = "0";
+    holder.style.zIndex = "-9999";
+    holder.appendChild(clone);
+    document.body.appendChild(holder);
+
+    const fileName = `${(window.latestQuoteData?.clientName || "LIC").replace(/\s+/g, "_")}_Quotation.pdf`;
+    html2pdf()
+      .set({
+        margin: 8,
+        filename: fileName,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, backgroundColor: "#ffffff" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      })
+      .from(clone)
+      .save()
+      .then(() => document.body.removeChild(holder))
+      .catch(() => document.body.removeChild(holder));
+  };
+
+  // 4. Fix WhatsApp Share Button on Android App / Browser
+  window.shareQuotationWhatsApp = () => {
+    const q = window.latestQuoteData;
+    if (!q) return alert("Please calculate an illustration first.");
+    const advisor = document.getElementById("pdfAdvisorName")?.textContent || "LIC Advisor";
+    const text = `*LIC Benefit Illustration* 🛡️\n\nDear *${q.clientName}*,\n📌 *Plan:* ${q.planName}\n💰 *Sum Assured:* ₹${q.sa.toLocaleString("en-IN")}\n⏳ *Term / PPT:* ${q.term} / ${q.ppt} Yrs\n💳 *1st Yr Yearly Premium:* ₹${q.yr1Y.toLocaleString("en-IN")}\n🎯 *Est. Tax-Free Maturity:* *₹${q.maturity.toLocaleString("en-IN")}*\n\nRegards,\n*${advisor}*`;
+    const cleanPhone = q.mobile ? "91" + q.mobile.replace(/\D/g, "").slice(-10) : "";
+    const waUrl = `https://api.whatsapp.com/send?${cleanPhone ? "phone=" + cleanPhone + "&" : ""}text=${encodeURIComponent(text)}`;
+    window.location.href = waUrl;
+  };
+});
+// FIX: Include Full Agent Details (Name, Code, Mobile, Branch) in Both PDF & WhatsApp
+(function () {
+  function getAgentDetails() {
+    const name = (document.getElementById("profName")?.value || "").trim() || "Samsad Ansari (LIC Advisor)";
+    const code = (document.getElementById("profCode")?.value || "").trim();
+    const mobile = (document.getElementById("profMobile")?.value || "").trim() || "7004776567";
+    const branch = (document.getElementById("profBranch")?.value || "").trim() || "Chirkunda Branch (556)";
+    return { name, code, mobile, branch };
+  }
+
+  // Update PDF Card Footer with Agent Details before printing/downloading
+  const origPDF = window.downloadQuotationPDF;
+  window.downloadQuotationPDF = () => {
+    const ag = getAgentDetails();
+    const nameEl = document.getElementById("pdfAdvisorName");
+    const metaEl = document.getElementById("pdfAdvisorMeta");
+    if (nameEl) nameEl.textContent = `Prepared by: ${ag.name}`;
+    if (metaEl) {
+      metaEl.textContent = `${ag.code ? "Agency Code: " + ag.code + " | " : ""}Mob: ${ag.mobile} | Branch: ${ag.branch}`;
+    }
+    if (origPDF) origPDF();
+  };
+
+  // Update WhatsApp Share Message with Full Agent Details
+  window.shareQuotationWhatsApp = () => {
+    const q = window.latestQuoteData;
+    if (!q) return alert("Please calculate an illustration first.");
+    const ag = getAgentDetails();
+
+    const text =
+      `*LIC Benefit Illustration* 🛡️\n\n` +
+      `Dear *${q.clientName}*,\n` +
+      `📌 *Plan:* ${q.planName}\n` +
+      `💰 *Sum Assured:* ₹${q.sa.toLocaleString("en-IN")}\n` +
+      `⏳ *Term / PPT:* ${q.term} / ${q.ppt} Yrs\n` +
+      `💳 *1st Yr Yearly Premium:* ₹${q.yr1Y.toLocaleString("en-IN")}\n` +
+      `🎯 *Est. Tax-Free Maturity:* *₹${q.maturity.toLocaleString("en-IN")}*\n\n` +
+      `━━━━━━━━━━━━━━━━━━\n` +
+      `*Advisor Details:*\n` +
+      `👤 *${ag.name}*\n` +
+      `${ag.code ? "🆔 Agency Code: " + ag.code + "\n" : ""}` +
+      `📞 Mobile: ${ag.mobile}\n` +
+      `🏢 Branch: ${ag.branch}`;
+
+    const cleanPhone = q.mobile ? "91" + q.mobile.replace(/\D/g, "").slice(-10) : "";
+    const waUrl = `https://api.whatsapp.com/send?${cleanPhone ? "phone=" + cleanPhone + "&" : ""}text=${encodeURIComponent(text)}`;
+    window.location.href = waUrl;
+  };
+})();
 
