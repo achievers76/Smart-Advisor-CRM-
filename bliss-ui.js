@@ -274,3 +274,36 @@ window.recalcCommBox = () => {
   window.addEventListener("DOMContentLoaded", applyIdentity);
   setTimeout(applyIdentity, 700);
 })();
+// SET FIRST PAGE BRANDING TO OFFICIAL LIC EMBLEM + "LIC Smart Advisor" (No Personal Name/Branch)
+(function setOfficialAppBrand() {
+  function applyBrand() {
+    const auth = document.getElementById("authScreen");
+    if (!auth) return;
+
+    // 1. Set Main Title strictly to "LIC Smart Advisor"
+    const titleEl = auth.querySelector("h1, h2");
+    if (titleEl) {
+      titleEl.innerHTML = `<span style="color:#003366;font-weight:900;letter-spacing:0.3px;">LIC Smart Advisor</span>`;
+    }
+
+    // 2. Keep clean official tagline without personal/branch details
+    const subEl = auth.querySelector("p");
+    if (subEl) {
+      subEl.textContent = "All-In-One Insurance Calculator & Persistency Suite";
+    }
+
+    // 3. Clean Direct Login button text & bottom caption
+    const directBtn = document.getElementById("instantAdvisorBtn");
+    if (directBtn) {
+      directBtn.innerHTML = `<i class="fas fa-shield-halved"></i> Enter LIC Smart Advisor`;
+      const caption = directBtn.nextElementSibling;
+      if (caption && caption.tagName === "P") {
+        caption.textContent = "भारतीय जीवन बीमा निगम • Digital Advisor Portal";
+      }
+    }
+  }
+
+  applyBrand();
+  window.addEventListener("DOMContentLoaded", applyBrand);
+  setTimeout(applyBrand, 800);
+})();
