@@ -32,7 +32,6 @@
         <h1 class="text-xl font-black text-[#003366] mt-3">LIC Smart Advisor</h1>
         <p class="text-[11px] text-slate-500 font-semibold">भारतीय जीवन बीमा निगम • Digital Advisor Suite</p>
       </div>
-
       <div class="space-y-3 text-sm">
         <div>
           <label class="text-xs font-bold text-slate-600">Advisor Email ID</label>
@@ -42,25 +41,97 @@
           <label class="text-xs font-bold text-slate-600">Password</label>
           <input type="password" id="authPassword" placeholder="Enter Password" class="w-full p-3 border rounded-xl mt-1 bg-slate-50" />
         </div>
-        <button id="authSubmitBtn" type="button" onclick="openLICApp()" class="w-full bg-[#003366] text-white font-bold py-3.5 rounded-xl shadow-lg active:scale-95 transition">
+        <button type="button" onclick="openLICApp()" class="w-full bg-[#003366] text-[#ffcc00] font-extrabold py-3.5 rounded-xl shadow-lg active:scale-95 transition">
           Login to Dashboard
         </button>
       </div>
     </div>
   </div>
-    <!-- 2. MAIN ADVISOR APPLICATION -->
+
+  <!-- 2. MAIN ADVISOR APP -->
   <div id="appContainer" class="hidden max-w-md mx-auto min-h-screen bg-slate-50 pb-24 shadow-xl">
     <header style="background:linear-gradient(135deg,#001a3a,#003366);border-bottom:3px solid #ffcc00;" class="text-white p-3.5 sticky top-0 z-40 flex justify-between items-center">
       <div>
         <h1 class="font-black text-base tracking-wide text-[#ffcc00]">LIC Smart Advisor</h1>
         <p class="text-[10px] text-blue-100">भारतीय जीवन बीमा निगम • All-In-One Suite</p>
       </div>
-      <button onclick="logoutLICApp()" class="text-xs bg-white/15 px-3 py-1.5 rounded-lg font-bold">Logout</button>
+      <button type="button" onclick="logoutLICApp()" class="text-xs bg-white/15 px-3 py-1.5 rounded-lg font-bold">Logout</button>
     </header>
 
     <main class="p-3.5 space-y-4">
-      <!-- DASHBOARD TAB -->
-      <section id="tab-dashboard" class="space-y-4"></section>
+      <!-- HOME / DASHBOARD TAB -->
+      <section id="tab-dashboard" class="space-y-4">
+        <div style="background:linear-gradient(135deg,#001f4d 0%,#003b7a 65%,#0a58ca 100%);border:2px solid #ffcc00;" class="rounded-2xl p-4 text-white shadow-lg">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+              <svg width="42" height="42" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="46" fill="#002244" stroke="#ffcc00" stroke-width="4"/>
+                <path d="M50 15 C42 28, 42 38, 50 45 C58 38, 58 28, 50 15 Z" fill="#ff9900"/>
+                <path d="M50 23 C46 31, 46 37, 50 41 C54 37, 54 31, 50 23 Z" fill="#ffee55"/>
+                <path d="M34 46 Q50 57 66 46 Q58 59 50 59 Q42 59 34 46 Z" fill="#ffcc00"/>
+                <path d="M21 52 C21 73, 38 81, 48 83 C40 74, 32 64, 29 50 Z" fill="#ffffff"/>
+                <path d="M79 52 C79 73, 62 81, 52 83 C60 74, 68 64, 71 50 Z" fill="#ffffff"/>
+              </svg>
+              <div>
+                <span class="bg-[#ffcc00] text-[#001f4d] text-[9px] font-black px-2 py-0.5 rounded-full">★ LIC PRO SUITE • 2026</span>
+                <h2 class="text-base font-extrabold mt-1">LIC Smart Advisor</h2>
+                <p class="text-[10px] text-blue-100">योगक्षेमं वहाम्यहम् • All-In-One Portal</p>
+              </div>
+            </div>
+            <div class="bg-white/15 border border-[#ffcc00] rounded-xl px-3 py-1.5 text-center">
+              <div class="text-base font-black text-[#ffcc00]">28</div>
+              <div class="text-[8px] font-bold">PLANS</div>
+            </div>
+          </div>
+        </div>
+               <div class="bg-white rounded-2xl p-4 shadow-sm border border-blue-100">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold text-xs text-[#003366]"><i class="fas fa-crown text-amber-500 mr-1"></i> Pro Advisor Tools</h3>
+            <span class="text-[9px] bg-blue-50 text-[#003366] px-2 py-0.5 rounded-full font-bold">ALL-IN-ONE</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2.5 text-center">
+            <button type="button" onclick="switchTab('calculator')" class="p-3 rounded-2xl bg-blue-50 border border-blue-100 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-[#003366] text-[#ffcc00] flex items-center justify-center text-base mb-1 shadow"><i class="fas fa-file-invoice-dollar"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">Plan Quote</p>
+            </button>
+            <button type="button" onclick="openBlissModal('revivalModal')" class="p-3 rounded-2xl bg-rose-50 border border-rose-100 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-rose-600 text-white flex items-center justify-center text-base mb-1 shadow"><i class="fas fa-calculator"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">Late Fee Calc</p>
+            </button>
+            <button type="button" onclick="openBlissModal('comboModal')" class="p-3 rounded-2xl bg-amber-50 border border-amber-100 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-amber-500 text-[#003366] flex items-center justify-center text-base mb-1 shadow"><i class="fas fa-layer-group"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">Magic Combos</p>
+            </button>
+            <button type="button" onclick="openProTool('dueToolModal')" class="p-3 rounded-2xl bg-sky-50 border border-sky-200 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-sky-600 text-white flex items-center justify-center text-base mb-1 shadow"><i class="fab fa-whatsapp"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">Due Reminder</p>
+            </button>
+            <button type="button" onclick="openProTool('wishToolModal')" class="p-3 rounded-2xl bg-pink-50 border border-pink-200 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-pink-600 text-white flex items-center justify-center text-base mb-1 shadow"><i class="fas fa-cake-candles"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">B'day Wishes</p>
+            </button>
+            <button type="button" onclick="openCommissionTracker()" class="p-3 rounded-2xl bg-orange-50 border border-orange-200 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-amber-600 text-white flex items-center justify-center text-base mb-1 shadow"><i class="fas fa-coins"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">Commission</p>
+            </button>
+            <button type="button" onclick="switchTab('crm')" class="p-3 rounded-2xl bg-emerald-50 border border-emerald-100 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-emerald-600 text-white flex items-center justify-center text-base mb-1 shadow"><i class="fas fa-users"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">Clients List</p>
+            </button>
+            <button type="button" onclick="openImportModal()" class="p-3 rounded-2xl bg-purple-50 border border-purple-100 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-purple-600 text-white flex items-center justify-center text-base mb-1 shadow"><i class="fas fa-file-excel"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">Portal Import</p>
+            </button>
+            <button type="button" onclick="switchTab('profile')" class="p-3 rounded-2xl bg-slate-100 border border-slate-200 active:scale-95 transition">
+              <div class="w-10 h-10 mx-auto rounded-xl bg-slate-700 text-white flex items-center justify-center text-base mb-1 shadow"><i class="fas fa-id-card"></i></div>
+              <p class="text-[11px] font-bold text-slate-800">Branding</p>
+            </button>
+          </div>
+        </div>
+        <div class="text-center pt-1">
+          <span class="inline-block bg-[#003366] text-[#ffcc00] text-[10px] font-bold px-3 py-1 rounded-full border border-[#ffcc00]">भारतीय जीवन बीमा निगम • योगक्षेमं वहाम्यहम्</span>
+        </div>
+      </section>
 
       <!-- CALCULATOR TAB -->
       <section id="tab-calculator" class="hidden space-y-3">
@@ -78,17 +149,14 @@
               <div><label class="font-bold text-slate-600">PPT (Yrs)</label><input type="number" id="calcPPT" value="15" class="w-full p-2.5 border rounded-xl mt-1" /></div>
             </div>
             <div><label class="font-bold text-slate-600">Official LIC Rider</label><select id="calcRider" class="w-full p-2.5 border rounded-xl bg-slate-50 mt-1"></select></div>
-            <button onclick="calculateBenefit()" class="w-full bg-[#003366] text-[#ffcc00] font-extrabold py-3 rounded-xl text-sm shadow">Calculate Illustration</button>
+            <button type="button" onclick="calculateBenefit()" class="w-full bg-[#003366] text-[#ffcc00] font-extrabold py-3 rounded-xl text-sm shadow">Calculate Illustration</button>
           </div>
         </div>
 
-        <!-- QUOTATION & PDF PREVIEW -->
         <div id="quotationPrintArea" class="bg-white p-4 rounded-2xl shadow border border-slate-200 space-y-3">
-          <div class="lic-blue bg-[#003366] text-white p-3 rounded-xl flex items-center justify-between">
-            <div>
-              <h3 id="pdfPlanTitle" class="font-bold text-sm text-[#ffcc00]">LIC Benefit Illustration</h3>
-              <p id="pdfClientMeta" class="text-[10px] text-blue-100">Prepared exclusively for Valued Client</p>
-            </div>
+          <div class="bg-[#003366] text-white p-3 rounded-xl">
+            <h3 id="pdfPlanTitle" class="font-bold text-sm text-[#ffcc00]">LIC Benefit Illustration</h3>
+            <p id="pdfClientMeta" class="text-[10px] text-blue-100">Prepared exclusively for Valued Client</p>
           </div>
           <div id="quoteSummaryGrid" class="grid grid-cols-2 gap-2 text-xs"></div>
           <div class="border-t pt-2 text-[10px] text-slate-600">
@@ -98,8 +166,8 @@
         </div>
 
         <div class="grid grid-cols-2 gap-2">
-          <button onclick="downloadQuotePDF()" class="bg-rose-600 text-white font-bold py-3 rounded-xl text-xs shadow"><i class="fas fa-file-pdf mr-1"></i> Download PDF</button>
-          <button onclick="shareQuoteWhatsApp()" class="bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs shadow"><i class="fab fa-whatsapp mr-1"></i> Share WhatsApp</button>
+          <button type="button" onclick="downloadQuotePDF()" class="bg-rose-600 text-white font-bold py-3 rounded-xl text-xs shadow"><i class="fas fa-file-pdf mr-1"></i> Download PDF</button>
+          <button type="button" onclick="shareQuoteWhatsApp()" class="bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs shadow"><i class="fab fa-whatsapp mr-1"></i> Share WhatsApp</button>
         </div>
       </section>
             <!-- CLIENTS TAB -->
@@ -107,14 +175,14 @@
         <div class="bg-white p-4 rounded-2xl shadow-sm border space-y-3">
           <div class="flex justify-between items-center">
             <h2 class="font-bold text-sm text-[#003366]">Policyholders & Due Register</h2>
-            <button onclick="openImportModal()" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold"><i class="fas fa-file-excel mr-1"></i> Import Excel</button>
+            <button type="button" onclick="openImportModal()" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold"><i class="fas fa-file-excel mr-1"></i> Import Excel</button>
           </div>
           <input type="file" id="excelUploadInput" accept=".xlsx,.xls,.csv" class="w-full text-xs border p-2 rounded-xl" />
           <div id="crmListContainer" class="text-xs text-slate-500 text-center py-6">Upload your LIC Portal Excel/CSV file above to view policyholders.</div>
         </div>
       </section>
 
-      <!-- PROFILE / BRANDING TAB -->
+      <!-- PROFILE TAB -->
       <section id="tab-profile" class="hidden space-y-3">
         <div class="bg-white p-4 rounded-2xl shadow-sm border space-y-3 text-xs">
           <h2 class="font-bold text-sm text-[#003366]">Advisor Branding (For PDF & WhatsApp)</h2>
@@ -122,30 +190,29 @@
           <div><label class="font-bold">LIC Agency Code</label><input type="text" id="profCode" placeholder="Enter Agency Code" class="w-full p-2.5 border rounded-xl mt-1" /></div>
           <div><label class="font-bold">WhatsApp Mobile</label><input type="tel" id="profMobile" value="7004776567" class="w-full p-2.5 border rounded-xl mt-1" /></div>
           <div><label class="font-bold">LIC Branch Name & Code</label><input type="text" id="profBranch" value="Chirkunda Branch (556)" class="w-full p-2.5 border rounded-xl mt-1" /></div>
-          <button onclick="alert('Advisor Branding Saved!')" class="w-full bg-[#003366] text-white font-bold py-3 rounded-xl">Save Branding Details</button>
+          <button type="button" onclick="alert('Advisor Branding Saved!')" class="w-full bg-[#003366] text-white font-bold py-3 rounded-xl">Save Branding Details</button>
         </div>
       </section>
     </main>
 
     <!-- BOTTOM NAVIGATION BAR -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-slate-200 grid grid-cols-4 py-2 text-center text-[10px] font-bold text-slate-600 z-40">
-      <button onclick="switchTab('dashboard')" class="flex flex-col items-center gap-1 text-[#003366]"><i class="fas fa-home text-base"></i>Home</button>
-      <button onclick="switchTab('calculator')" class="flex flex-col items-center gap-1"><i class="fas fa-calculator text-base"></i>Calculator</button>
-      <button onclick="switchTab('crm')" class="flex flex-col items-center gap-1"><i class="fas fa-users text-base"></i>Clients</button>
-      <button onclick="switchTab('profile')" class="flex flex-col items-center gap-1"><i class="fas fa-user-tie text-base"></i>Profile</button>
+      <button type="button" onclick="switchTab('dashboard')" class="flex flex-col items-center gap-1 text-[#003366]"><i class="fas fa-home text-base"></i>Home</button>
+      <button type="button" onclick="switchTab('calculator')" class="flex flex-col items-center gap-1"><i class="fas fa-calculator text-base"></i>Calculator</button>
+      <button type="button" onclick="switchTab('crm')" class="flex flex-col items-center gap-1"><i class="fas fa-users text-base"></i>Clients</button>
+      <button type="button" onclick="switchTab('profile')" class="flex flex-col items-center gap-1"><i class="fas fa-user-tie text-base"></i>Profile</button>
     </nav>
   </div>
 
   <script>
     window.LIC_DB = window.LIC_DB || [];
-    window.openLICApp = () => { document.getElementById("authScreen").classList.add("hidden"); document.getElementById("appContainer").classList.remove("hidden"); };
-    window.logoutLICApp = () => { document.getElementById("appContainer").classList.add("hidden"); document.getElementById("authScreen").classList.remove("hidden"); };
-    window.switchTab = (t) => { ["dashboard","calculator","crm","profile"].forEach(id => document.getElementById("tab-"+id)?.classList.toggle("hidden", id !== t)); };
-    window.openImportModal = () => { switchTab("crm"); document.getElementById("excelUploadInput")?.click(); };
-    window.handlePlanChange = () => { const p = LIC_DB.find(x => x.id === document.getElementById("calcPlanSelect")?.value); if (p && p.combos?.[0]) { document.getElementById("calcTerm").value = p.combos[0].t; document.getElementById("calcPPT").value = p.combos[0].p; } };
-    window.calculateBenefit = () => {
-      const p = LIC_DB.find(x => x.id === document.getElementById("calcPlanSelect")?.value) || LIC_DB[0];
-      if (!p) return;
+    window.openLICApp = function () { document.getElementById("authScreen").classList.add("hidden"); document.getElementById("appContainer").classList.remove("hidden"); };
+    window.logoutLICApp = function () { document.getElementById("appContainer").classList.add("hidden"); document.getElementById("authScreen").classList.remove("hidden"); };
+    window.switchTab = function (t) { ["dashboard","calculator","crm","profile"].forEach(function (id) { const el = document.getElementById("tab-"+id); if (el) el.classList.toggle("hidden", id !== t); }); window.scrollTo(0, 0); };
+    window.openImportModal = function () { window.switchTab("crm"); document.getElementById("excelUploadInput")?.click(); };
+    window.handlePlanChange = function () { const p = LIC_DB.find(x => x.id === document.getElementById("calcPlanSelect")?.value); if (p && p.combos?.[0]) { document.getElementById("calcTerm").value = p.combos[0].t; document.getElementById("calcPPT").value = p.combos[0].p; } };
+    window.calculateBenefit = function () {
+      const p = LIC_DB.find(x => x.id === document.getElementById("calcPlanSelect")?.value) || { name: "LIC Jeevan Labh (Plan 736)", rates: { 20: 54.4 }, bonusBands: { 20: [43] }, type: "Endowment" };
       const sa = parseFloat(document.getElementById("calcSA").value) || 500000;
       const term = parseInt(document.getElementById("calcTerm").value) || 20;
       const ppt = parseInt(document.getElementById("calcPPT").value) || 15;
@@ -155,13 +222,15 @@
       const maturity = p.type === "Term Plan" ? 0 : Math.round(sa + (sa / 1000) * bonusRate * term);
       window.latestQuoteData = { plan: p, sa, term, ppt, yr1Y, maturity };
       document.getElementById("pdfPlanTitle").textContent = p.name;
-      document.getElementById("pdfClientMeta").textContent = `Client: ${document.getElementById("calcClientName").value || "Valued Client"} • Term: ${term} Yrs / PPT: ${ppt} Yrs`;
-      document.getElementById("quoteSummaryGrid").innerHTML = `<div class="p-2.5 bg-blue-50 rounded-xl"><p class="text-slate-500">Sum Assured</p><p class="font-black text-[#003366]">₹${sa.toLocaleString("en-IN")}</p></div><div class="p-2.5 bg-amber-50 rounded-xl"><p class="text-slate-500">1st Yr Premium</p><p class="font-black text-amber-800">₹${yr1Y.toLocaleString("en-IN")}/yr</p></div><div class="p-2.5 bg-emerald-50 rounded-xl col-span-2"><p class="text-slate-500">Est. Maturity Return</p><p class="font-black text-emerald-800 text-sm">₹${maturity.toLocaleString("en-IN")}</p></div>`;
+      document.getElementById("pdfClientMeta").textContent = "Client: " + (document.getElementById("calcClientName").value || "Valued Client") + " • Term: " + term + " Yrs / PPT: " + ppt + " Yrs";
+      document.getElementById("quoteSummaryGrid").innerHTML = '<div class="p-2.5 bg-blue-50 rounded-xl"><p class="text-slate-500">Sum Assured</p><p class="font-black text-[#003366]">₹' + sa.toLocaleString("en-IN") + '</p></div><div class="p-2.5 bg-amber-50 rounded-xl"><p class="text-slate-500">1st Yr Premium</p><p class="font-black text-amber-800">₹' + yr1Y.toLocaleString("en-IN") + '/yr</p></div><div class="p-2.5 bg-emerald-50 rounded-xl col-span-2"><p class="text-slate-500">Est. Maturity Return</p><p class="font-black text-emerald-800 text-sm">₹' + maturity.toLocaleString("en-IN") + '</p></div>';
     };
-    window.downloadQuotePDF = () => { html2pdf().from(document.getElementById("quotationPrintArea")).save("LIC_Quotation.pdf"); };
-    window.shareQuoteWhatsApp = () => { const q = window.latestQuoteData; if (!q) return alert("Calculate first!"); window.location.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(`*${q.plan.name}*\nSum Assured: ₹${q.sa.toLocaleString("en-IN")}\n1st Yr Premium: ₹${q.yr1Y.toLocaleString("en-IN")}\nEst. Maturity: ₹${q.maturity.toLocaleString("en-IN")}`)}`; };
+    window.downloadQuotePDF = function () { html2pdf().from(document.getElementById("quotationPrintArea")).save("LIC_Quotation.pdf"); };
+    window.shareQuoteWhatsApp = function () { const q = window.latestQuoteData; if (!q) return alert("Pehle Calculate dabayein!"); window.location.href = "https://api.whatsapp.com/send?text=" + encodeURIComponent("*" + q.plan.name + "*\nSum Assured: ₹" + q.sa.toLocaleString("en-IN") + "\n1st Yr Premium: ₹" + q.yr1Y.toLocaleString("en-IN") + "\nEst. Maturity: ₹" + q.maturity.toLocaleString("en-IN")); };
+    window.openBlissModal = function (id) { if (id === "revivalModal") { const d = parseFloat(prompt("Unpaid Premium (₹):", "15000")), m = parseInt(prompt("Delay (Months):", "6")); if (d && m) { const f = Math.round(d * (0.095 / 12) * m); alert("Due: ₹" + d + "\nLate Fee: ₹" + f + "\nTotal Payable: ₹" + (d + f)); } } else { window.switchTab("calculator"); } };
+    window.openProTool = function (id) { const c = prompt("Client Name:", "Valued Policyholder") || "Valued Policyholder"; const msg = id === "wishToolModal" ? "Warm Birthday Wishes to " + c + "! - Samsad Ansari (LIC Advisor)" : "Dear " + c + ", gentle reminder for your LIC Policy premium due. - Samsad Ansari (LIC Advisor)"; window.location.href = "https://api.whatsapp.com/send?text=" + encodeURIComponent(msg); };
+    window.openCommissionTracker = function () { const p = parseFloat(prompt("1st Year Premium (₹):", "25000")); if (p) { const fy = Math.round(p * 0.25), b = Math.round(fy * 0.40); alert("1st Yr Comm (25%): ₹" + fy + "\nBonus Comm (40%): ₹" + b + "\nTotal Earning: ₹" + (fy + b)); } };
   </script>
-  <script src="lic-engine.js?v=200"></script>
-  <script src="bliss-ui.js?v=200"></script>
+  <script src="lic-engine.js?v=300"></script>
 </body>
 </html>
