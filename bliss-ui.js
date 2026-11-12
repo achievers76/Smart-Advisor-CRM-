@@ -233,3 +233,44 @@ window.recalcCommBox = () => {
   window.addEventListener("DOMContentLoaded", bindLogin);
   setTimeout(bindLogin, 600);
 })();
+// FORCE PERSONALIZED ADVISOR NAME ("Samsad Ansari") EVERYWHERE (Dashboard, Profile, PDF & WhatsApp)
+(function enforceAdvisorIdentity() {
+  const MY_NAME = "Samsad Ansari";
+  const MY_BRANCH = "Chirkunda Branch (556)";
+  const MY_MOBILE = "7004776567";
+
+  function applyIdentity() {
+    // 1. Pre-fill Profile fields if empty so it saves permanently
+    const pName = document.getElementById("profName");
+    const pBranch = document.getElementById("profBranch");
+    const pMob = document.getElementById("profMobile");
+    if (pName && !pName.value.trim()) pName.value = MY_NAME;
+    if (pBranch && !pBranch.value.trim()) pBranch.value = MY_BRANCH;
+    if (pMob && !pMob.value.trim()) pMob.value = MY_MOBILE;
+
+    const activeName = (pName?.value || "").trim() || MY_NAME;
+    const activeBranch = (pBranch?.value || "").trim() || MY_BRANCH;
+    const activeMob = (pMob?.value || "").trim() || MY_MOBILE;
+
+    // 2. Update Dashboard Hero Welcome Heading with your exact name
+    const dashHeading = document.querySelector("#tab-dashboard h2");
+    if (dashHeading && dashHeading.textContent.includes("Welcome")) {
+      dashHeading.textContent = `Welcome, ${activeName}`;
+      const subP = dashHeading.nextElementSibling;
+      if (subP) subP.textContent = `${activeBranch} • LIC Pro Advisor Suite`;
+    }
+
+    // 3. Update Quotation Preview & PDF Footer with your exact name
+    const pdfName = document.getElementById("pdfAdvisorName");
+    const pdfMeta = document.getElementById("pdfAdvisorMeta");
+    if (pdfName) pdfName.textContent = `Prepared by: ${activeName} (LIC Advisor)`;
+    if (pdfMeta) {
+      const code = (document.getElementById("profCode")?.value || "").trim();
+      pdfMeta.textContent = `${code ? "Code: " + code + " | " : ""}Mob: ${activeMob} | ${activeBranch}`;
+    }
+  }
+
+  applyIdentity();
+  window.addEventListener("DOMContentLoaded", applyIdentity);
+  setTimeout(applyIdentity, 700);
+})();
