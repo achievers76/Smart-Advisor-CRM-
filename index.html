@@ -1922,6 +1922,42 @@
     setTimeout(renderLICLogo, 300);
   })();
 </script>
+  <script>
+  window.addEventListener("load", function () {
+    const auth = document.getElementById("authScreen");
+    const app = document.getElementById("appContainer");
+
+    // 1. Ensure Login Screen is visible and main app is hidden at startup
+    if (auth) {
+      auth.classList.remove("hidden");
+      auth.style.display = "flex";
+    }
+    if (app) {
+      app.classList.add("hidden");
+      app.style.display = "none";
+    }
+
+    // 2. Remove any duplicate login form/card if present
+    if (auth) {
+      const cards = auth.querySelectorAll(".bg-white, form");
+      for (let i = 1; i < cards.length; i++) cards[i].remove();
+
+      // 3. Make Login button open the Dashboard cleanly
+      const btn = auth.querySelector("button");
+      if (btn) {
+        btn.type = "button";
+        btn.onclick = function () {
+          auth.style.display = "none";
+          auth.classList.add("hidden");
+          if (app) {
+            app.classList.remove("hidden");
+            app.style.display = "block";
+          }
+        };
+      }
+    }
+  });
+  </script>
   
 </body>
 </html>
