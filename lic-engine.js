@@ -893,4 +893,67 @@ window.addEventListener("DOMContentLoaded", () => {
     window.location.href = waUrl;
   };
 })();
+// OFFICIAL 2026 LIC PORTAL PLANS LIST (Exact Table Numbers from Screenshots)
+const OFFICIAL_LIC_2026 = [
+  // 1. Endowment Plans (12 Plans)
+  { id: "717", name: "LIC's Single Premium Endowment (717)", type: "Endowment", minAge: 0, maxAge: 65, minSA: 100000, combos: [{ t: 10, p: 1 }, { t: 15, p: 1 }, { t: 20, p: 1 }], rates: { 10: 795.0, 15: 685.0, 20: 590.0 }, slope: 1.80, bonusBands: { 10: [35, 37, 37], 15: [40, 42, 42], 20: [44, 46, 46] }, saRebate: { 500000: 15.0 } },
+  { id: "714", name: "LIC's New Endowment Plan (714)", type: "Endowment", minAge: 8, maxAge: 55, minSA: 200000, combos: [{ t: 12, p: 12 }, { t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }], rates: { 12: 87.90, 15: 69.50, 20: 51.40, 25: 40.85 }, slope: 0.44, bonusBands: { 12: [34, 36, 36], 15: [35, 37, 37], 20: [38, 40, 40], 25: [44, 46, 46] }, saRebate: { 500000: 1.25, 1000000: 1.50 } },
+  { id: "715", name: "LIC's New Jeevan Anand (715)", type: "Endowment", minAge: 18, maxAge: 50, minSA: 200000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }, { t: 25, p: 25 }, { t: 30, p: 30 }], rates: { 15: 76.85, 20: 56.20, 25: 44.65, 30: 37.50 }, slope: 0.48, bonusBands: { 15: [37, 39, 39], 20: [41, 43, 43], 25: [45, 47, 47], 30: [46, 48, 48] }, saRebate: { 500000: 1.50, 1000000: 2.00 } },
+  { id: "733", name: "LIC's Jeevan Lakshya (733)", type: "Endowment", minAge: 18, maxAge: 50, minSA: 200000, combos: [{ t: 15, p: 12 }, { t: 18, p: 15 }, { t: 21, p: 18 }, { t: 25, p: 22 }], rates: { 15: 74.10, 18: 60.80, 21: 51.65, 25: 43.20 }, slope: 0.45, bonusBands: { 15: [38, 40, 40], 18: [42, 44, 44], 21: [46, 48, 48], 25: [47, 49, 49] }, saRebate: { 500000: 1.25, 1000000: 1.50 } },
+  { id: "736", name: "LIC's Jeevan Labh Plan (736)", type: "Endowment", minAge: 8, maxAge: 59, minSA: 200000, combos: [{ t: 16, p: 10 }, { t: 21, p: 15 }, { t: 25, p: 16 }], rates: { 16: 85.40, 21: 54.95, 25: 47.45 }, slope: 0.42, bonusBands: { 16: [40, 42, 43], 21: [44, 46, 47], 25: [47, 49, 50] }, saRebate: { 500000: 1.25, 1000000: 1.50 } },
+  { id: "774", name: "LIC's Amritbaal (774)", type: "Endowment", minAge: 0, maxAge: 13, minSA: 200000, combos: [{ t: 15, p: 5 }, { t: 18, p: 6 }, { t: 20, p: 7 }, { t: 25, p: 10 }], rates: { 15: 162.40, 18: 134.80, 20: 116.50, 25: 84.20 }, slope: 0.15, bonusBands: { 15: [80, 80, 80], 18: [80, 80, 80], 20: [80, 80, 80], 25: [80, 80, 80] }, noFAB: true, saRebate: { 500000: 1.25, 1000000: 1.75 } },
+  { id: "912", name: "LIC's Nav Jeevan Shree (912)", type: "Endowment", minAge: 0, maxAge: 60, minSA: 500000, combos: [{ t: 10, p: 6 }, { t: 15, p: 8 }, { t: 20, p: 10 }], rates: { 10: 168.0, 15: 124.5, 20: 98.2 }, slope: 0.40, bonusBands: { 10: [55, 55, 55], 15: [60, 60, 60], 20: [65, 65, 65] }, noFAB: true, saRebate: { 1000000: 1.50 } },
+  { id: "881", name: "LIC's Bima Lakshmi (881)", type: "Endowment", minAge: 18, maxAge: 50, minSA: 200000, combos: [{ t: 15, p: 10 }, { t: 20, p: 15 }, { t: 25, p: 15 }], rates: { 15: 92.4, 20: 66.8, 25: 62.5 }, slope: 0.42, bonusBands: { 15: [42, 44, 44], 20: [46, 48, 48], 25: [48, 50, 50] }, saRebate: { 500000: 1.25 } },
+  { id: "888", name: "LIC's New Jeevan Sathi - Single (888)", type: "Endowment", minAge: 18, maxAge: 50, minSA: 200000, combos: [{ t: 15, p: 1 }, { t: 20, p: 1 }], rates: { 15: 710.0, 20: 615.0 }, slope: 1.90, bonusBands: { 15: [40, 42, 42], 20: [44, 46, 46] }, saRebate: { 500000: 12.0 } },
+  { id: "889", name: "LIC's New Jeevan Sathi - Limited (889)", type: "Endowment", minAge: 18, maxAge: 50, minSA: 200000, combos: [{ t: 15, p: 10 }, { t: 20, p: 15 }], rates: { 15: 98.5, 20: 69.2 }, slope: 0.52, bonusBands: { 15: [40, 42, 42], 20: [44, 46, 46] }, saRebate: { 500000: 1.50 } },
+  { id: "890", name: "LIC's New Bima Jyoti (890)", type: "Endowment", minAge: 0, maxAge: 60, minSA: 200000, combos: [{ t: 15, p: 10 }, { t: 16, p: 11 }, { t: 20, p: 15 }], rates: { 15: 108.40, 16: 101.20, 20: 82.55 }, slope: 0.40, bonusBands: { 15: [50, 50, 50], 16: [50, 50, 50], 20: [50, 50, 50] }, noFAB: true, saRebate: { 500000: 1.25 } },
+  { id: "770", name: "LIC's Bima Platinum (770)", type: "Endowment", minAge: 8, maxAge: 55, minSA: 1000000, combos: [{ t: 15, p: 10 }, { t: 20, p: 15 }], rates: { 15: 104.2, 20: 78.6 }, slope: 0.45, bonusBands: { 15: [52, 52, 52], 20: [55, 55, 55] }, noFAB: true, saRebate: { 2000000: 1.50 } },
+
+  // 2. Whole Life Plans (3 Plans)
+  { id: "745", name: "LIC's Jeevan Umang (745)", type: "Whole Life", minAge: 0, maxAge: 55, minSA: 200000, byPPT: true, payout: 0.08, combos: [{ t: 100, p: 15 }, { t: 100, p: 20 }, { t: 100, p: 25 }, { t: 100, p: 30 }], rates: { 15: 79.65, 20: 57.30, 25: 45.10, 30: 37.85 }, slope: 0.55, bonusBands: { 15: [49, 51, 51], 20: [48, 50, 50], 25: [47, 49, 49], 30: [46, 48, 48] }, saRebate: { 500000: 1.50, 1000000: 2.00 } },
+  { id: "771", name: "LIC's Jeevan Utsav (771)", type: "Whole Life", minAge: 0, maxAge: 65, minSA: 500000, byPPT: true, gaPPT: true, payout: 0.10, combos: [{ t: 100, p: 5 }, { t: 100, p: 8 }, { t: 100, p: 10 }, { t: 100, p: 12 }, { t: 100, p: 16 }], rates: { 5: 218.50, 8: 138.20, 10: 112.40, 12: 95.60, 16: 74.80 }, slope: 0.35, bonusBands: { 5: [40, 40, 40], 8: [40, 40, 40], 10: [40, 40, 40], 12: [40, 40, 40], 16: [40, 40, 40] }, noFAB: true, saRebate: { 1000000: 1.50 } },
+  { id: "883", name: "LIC's Jeevan Utsav - Single Premium (883)", type: "Whole Life", minAge: 0, maxAge: 65, minSA: 500000, byPPT: true, gaPPT: true, payout: 0.10, combos: [{ t: 100, p: 1 }], rates: { 1: 960.0 }, slope: 1.20, bonusBands: { 1: [40, 40, 40] }, noFAB: true, saRebate: { 1000000: 12.0 } }
+];
+// 3. Money Back (5 Plans) & 4. Term Assurance (8 Plans) + Official Riders Dropdown
+OFFICIAL_LIC_2026.push(
+  { id: "748", name: "LIC's Bima Shree (748)", type: "Money Back", minAge: 8, maxAge: 55, minSA: 1000000, combos: [{ t: 14, p: 10 }, { t: 16, p: 12 }, { t: 18, p: 14 }, { t: 20, p: 16 }], rates: { 14: 112.50, 16: 96.40, 18: 84.80, 20: 76.20 }, slope: 0.45, bonusBands: { 14: [50, 50, 50], 16: [50, 50, 50], 18: [50, 50, 50], 20: [55, 55, 55] }, noFAB: true, saRebate: { 2000000: 1.50 } },
+  { id: "720", name: "LIC's New Money Back - 20 Yrs (720)", type: "Money Back", minAge: 13, maxAge: 50, minSA: 200000, combos: [{ t: 20, p: 15 }], rates: { 20: 76.40 }, slope: 0.46, bonusBands: { 20: [37, 39, 39] }, note: "20% SA at Yr 5, 10, 15 + 40% SA & Bonus at Yr 20", saRebate: { 500000: 1.25 } },
+  { id: "721", name: "LIC's New Money Back - 25 Yrs (721)", type: "Money Back", minAge: 13, maxAge: 45, minSA: 200000, combos: [{ t: 25, p: 20 }], rates: { 25: 61.20 }, slope: 0.46, bonusBands: { 25: [40, 42, 42] }, note: "15% SA at Yr 5, 10, 15, 20 + 40% SA & Bonus at Yr 25", saRebate: { 500000: 1.25 } },
+  { id: "732", name: "LIC's New Children's Money Back (732)", type: "Money Back", minAge: 0, maxAge: 12, minSA: 200000, combos: [{ t: 25, p: 25 }], rates: { 25: 46.80 }, slope: 0.25, bonusBands: { 25: [40, 42, 42] }, note: "20% SA at Age 18, 20, 22 + 40% SA & Bonus at Age 25", saRebate: { 500000: 1.25 } },
+  { id: "734", name: "LIC's Jeevan Tarun (734)", type: "Money Back", minAge: 0, maxAge: 12, minSA: 200000, combos: [{ t: 25, p: 20 }], rates: { 25: 54.20 }, slope: 0.25, bonusBands: { 25: [40, 42, 42] }, note: "Annual Survival Payout Age 20-24 + Maturity at Age 25", saRebate: { 500000: 1.25 } },
+
+  // Term Assurance Plans (8 Plans)
+  { id: "876", name: "LIC's Digi Term (876)", type: "Term Plan", minAge: 18, maxAge: 45, minSA: 5000000, combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }], rates: { 20: 1.30, 30: 1.70 }, slope: 0.09, bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0] }, noFAB: true, saRebate: {} },
+  { id: "878", name: "LIC's Digi Credit Life (878)", type: "Term Plan", minAge: 18, maxAge: 45, minSA: 5000000, combos: [{ t: 15, p: 1 }, { t: 20, p: 1 }], rates: { 15: 13.8, 20: 17.5 }, slope: 0.42, bonusBands: { 15: [0, 0, 0], 20: [0, 0, 0] }, noFAB: true, saRebate: {} },
+  { id: "877", name: "LIC's Yuva Credit Life (877)", type: "Term Plan", minAge: 18, maxAge: 45, minSA: 5000000, combos: [{ t: 15, p: 1 }, { t: 20, p: 1 }], rates: { 15: 14.5, 20: 18.2 }, slope: 0.45, bonusBands: { 15: [0, 0, 0], 20: [0, 0, 0] }, noFAB: true, saRebate: {} },
+  { id: "875", name: "LIC's Yuva Term (875)", type: "Term Plan", minAge: 18, maxAge: 45, minSA: 5000000, combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }], rates: { 20: 1.35, 30: 1.75 }, slope: 0.09, bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0] }, noFAB: true, saRebate: {} },
+  { id: "954", name: "LIC's New Tech-Term (954)", type: "Term Plan", minAge: 18, maxAge: 65, minSA: 5000000, combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }], rates: { 20: 1.45, 30: 1.90 }, slope: 0.10, bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0] }, noFAB: true, saRebate: { 10000000: 0.30 } },
+  { id: "859", name: "LIC's Saral Jeevan Bima (859)", type: "Term Plan", minAge: 18, maxAge: 65, minSA: 500000, combos: [{ t: 10, p: 10 }, { t: 20, p: 20 }, { t: 30, p: 30 }], rates: { 10: 2.10, 20: 2.45, 30: 3.05 }, slope: 0.14, bonusBands: { 10: [0, 0, 0], 20: [0, 0, 0], 30: [0, 0, 0] }, noFAB: true, saRebate: {} },
+  { id: "887", name: "LIC's Bima Kavach (887)", type: "Term Plan", minAge: 18, maxAge: 60, minSA: 2500000, combos: [{ t: 20, p: 20 }, { t: 30, p: 30 }], rates: { 20: 1.55, 30: 2.05 }, slope: 0.11, bonusBands: { 20: [0, 0, 0], 30: [0, 0, 0] }, noFAB: true, saRebate: {} },
+  { id: "894", name: "LIC's Jeevan Raksha (894)", type: "Term Plan", minAge: 18, maxAge: 55, minSA: 1000000, combos: [{ t: 15, p: 15 }, { t: 20, p: 20 }], rates: { 15: 1.95, 20: 2.25 }, slope: 0.12, bonusBands: { 15: [0, 0, 0], 20: [0, 0, 0] }, noFAB: true, saRebate: {} }
+);
+
+// Replace LIC_DB with exactly these 28 official plans & populate Riders
+LIC_DB.length = 0;
+LIC_DB.push(...OFFICIAL_LIC_2026);
+
+const selPlan = document.getElementById("calcPlanSelect");
+if (selPlan) {
+  selPlan.innerHTML = LIC_DB.map(p => `<option value="${p.id}">${p.name} — [${p.type}]</option>`).join("");
+  if (window.handlePlanChange) window.handlePlanChange();
+}
+
+const selRider = document.getElementById("calcRider");
+if (selRider) {
+  selRider.innerHTML = `
+    <option value="0">No Rider</option>
+    <option value="1">1. Accident Benefit Rider</option>
+    <option value="2">2. Premium Waiver Benefit Rider</option>
+    <option value="3">3. Accidental Death & Disability (ADDB) Rider</option>
+    <option value="4">4. New Term Assurance Rider</option>
+    <option value="5">5. Linked Accidental Death Benefit Rider</option>
+    <option value="6">6. Critical Illness Health Rider</option>
+    <option value="7">7. Female Critical Illness Benefit Rider</option>
+  `;
+}
 
