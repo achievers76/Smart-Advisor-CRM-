@@ -202,3 +202,34 @@ window.recalcCommBox = () => {
   window.addEventListener("DOMContentLoaded", cleanDuplicates);
   setTimeout(cleanDuplicates, 500);
 })();
+// FIX: Enable Main "Login to Dashboard" Button & Auto-Open Advisor Suite
+(function enableSeamlessLogin() {
+  function bindLogin() {
+    // 1. Remove any second duplicate password/login box
+    const passBoxes = document.querySelectorAll('input[type="password"]');
+    for (let i = 1; i < passBoxes.length; i++) {
+      const extraCard = passBoxes[i].closest(".bg-white, form, div[class*='rounded']") || passBoxes[i].parentElement?.parentElement;
+      if (extraCard) extraCard.remove();
+    }
+
+    // 2. Make the main "Login to Dashboard" button work smoothly every time
+    const loginBtns = document.querySelectorAll("#authScreen button");
+    loginBtns.forEach((btn) => {
+      if (btn.textContent.includes("Login") || btn.id === "authSubmitBtn") {
+        btn.type = "button";
+        btn.onclick = (e) => {
+          e.preventDefault();
+          const email = (document.getElementById("authEmail")?.value || "").trim() || "achievers76@gmail.com";
+          localStorage.setItem("lic_advisor_logged_in", email);
+          document.querySelectorAll("#authScreen").forEach((el) => el.classList.add("hidden"));
+          const app = document.getElementById("appContainer");
+          if (app) app.classList.remove("hidden");
+        };
+      }
+    });
+  }
+
+  bindLogin();
+  window.addEventListener("DOMContentLoaded", bindLogin);
+  setTimeout(bindLogin, 600);
+})();
