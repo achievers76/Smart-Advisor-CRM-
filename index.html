@@ -1869,8 +1869,59 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script type="module" src="app.js"></script>
 <script src="lic-engine.js"></script>
-<script src="bliss-ui.js"></script>
+<script src="bliss-ui.js?v=99"></script> 
 </body>
+ <script src="bliss-ui.js?v=99"></script>
+<script>
+  (function forceLICFirstPage() {
+    function renderLICLogo() {
+      const auth = document.getElementById("authScreen");
+      if (!auth) return;
+
+      // Remove duplicate login box if any
+      const cards = auth.querySelectorAll("form, .bg-white");
+      if (cards.length > 1) {
+        for (let i = 1; i < cards.length; i++) cards[i].remove();
+      }
+
+      const mainCard = auth.querySelector(".bg-white") || auth.firstElementChild;
+      if (!mainCard || mainCard.dataset.licReady) return;
+      mainCard.dataset.licReady = "true";
+
+      // Replace yellow shield icon with Official LIC Emblem + Logo
+      const oldIcon = mainCard.querySelector(".lic-gold, .bg-yellow-400, .bg-amber-400, svg");
+      const licBrandHTML = `
+        <div style="text-align:center;margin-bottom:14px;">
+          <div style="display:inline-flex;align-items:center;gap:10px;background:#003366;padding:8px 18px;border-radius:16px;border:2px solid #ffcc00;box-shadow:0 4px 12px rgba(0,51,102,0.25);">
+            <svg width="42" height="42" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="46" fill="#002244" stroke="#ffcc00" stroke-width="4"/>
+              <path d="M50 15 C42 28, 42 38, 50 45 C58 38, 58 28, 50 15 Z" fill="#ff9900"/>
+              <path d="M50 23 C46 31, 46 37, 50 41 C54 37, 54 31, 50 23 Z" fill="#ffee55"/>
+              <path d="M34 46 Q50 57 66 46 Q58 59 50 59 Q42 59 34 46 Z" fill="#ffcc00"/>
+              <path d="M21 52 C21 73, 38 81, 48 83 C40 74, 32 64, 29 50 Z" fill="#ffffff"/>
+              <path d="M79 52 C79 73, 62 81, 52 83 C60 74, 68 64, 71 50 Z" fill="#ffffff"/>
+            </svg>
+            <div style="text-align:left;line-height:1.15;">
+              <div style="color:#ffcc00;font-weight:900;font-size:21px;letter-spacing:1px;">LIC</div>
+              <div style="color:#ffffff;font-size:10px;font-weight:700;">योगक्षेमं वहाम्यहम्</div>
+            </div>
+          </div>
+          <div style="font-size:10px;font-weight:800;color:#003366;margin-top:6px;">
+            भारतीय जीवन बीमा निगम • LIFE INSURANCE CORPORATION
+          </div>
+        </div>
+      `;
+      if (oldIcon && oldIcon.parentElement) oldIcon.parentElement.outerHTML = licBrandHTML;
+      else mainCard.insertAdjacentHTML("afterbegin", licBrandHTML);
+
+      // Set App Title to "LIC Smart Advisor"
+      const h = mainCard.querySelector("h1, h2");
+      if (h) h.innerHTML = `<span style="color:#003366;font-weight:900;">LIC Smart Advisor</span>`;
+    }
+    renderLICLogo();
+    setTimeout(renderLICLogo, 300);
+  })();
+</script>
   
 </body>
 </html>
